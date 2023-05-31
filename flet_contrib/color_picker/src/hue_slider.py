@@ -40,10 +40,6 @@ class HueSlider(ft.GestureDetector):
     def number_of_hues(self, value: int):
         self.__number_of_hues = value
 
-    def _build(self):
-        # called when the control is first added to a page
-        pass
-
     def _before_build_command(self):
         super()._before_build_command()
         # called every time on self.update()
