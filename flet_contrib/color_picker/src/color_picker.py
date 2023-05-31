@@ -36,7 +36,8 @@ class ColorPicker(ft.Column):
         hue = hex2hsv(self.color)[0]
         self.update_circle_position()
         self.update_color_matrix(hue)
-        self.hue_slider.update_hue_slider(hue)
+        # self.hue_slider.update_hue_slider(hue)
+        self.hue_slider.update()
 
     def update_circle_position(self):
         hsv_color = hex2hsv(self.color)
