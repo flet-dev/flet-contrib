@@ -24,47 +24,15 @@ class HueSlider(ft.GestureDetector):
     def _before_build_command(self):
         super()._before_build_command()
         # called every time on self.update()
-        color = rgb2hex(colorsys.hsv_to_rgb(self.hue, 1, 1))
-        self.circle.left = (
-            self.hue * self.number_of_hues * self.hue_width + self.hue_width / 2
-        )
-        self.circle.bgcolor = color
-
-    # def update_hue_slider(self, hue):
-    #     self.hue = hue
-    #     x = self.hue * self.number_of_hues * self.hue_width + CIRCLE_SIZE
-    #     self.update_selected_hue(x)
-
-    def find_hue(self, x):
-        # for hue_block in self.content.controls[
-        #     :-1
-        # ]:  # excluding the last element of the stack controls list which is the circle
-        #     if x >= hue_block.left and x <= hue_block.left + self.hue_width:
-        #         color = hue_block.bgcolor
-        #         rgb_color = hex2rgb(color)
-        #         hsv_color = colorsys.rgb_to_hsv(
-        #             round(rgb_color[0] / 255, 1),
-        #             round(rgb_color[1] / 255, 1),
-        #             round(rgb_color[2] / 255, 1),
-        #         )
-        #         self.hue = hsv_color[0]
-        self.hue = max(0, x / (SLIDER_WIDTH - CIRCLE_SIZE / 2))
+        self.circle.left = self.hue * (SLIDER_WIDTH - CIRCLE_SIZE)
+        self.circle.bgcolor = rgb2hex(colorsys.hsv_to_rgb(self.hue, 1, 1))
 
     def update_selected_hue(self, x):
-        self.find_hue(x)
-        color = rgb2hex(colorsys.hsv_to_rgb(self.hue, 1, 1))
-        self.circle.left = max(
-            0,
-            min(
-                x - CIRCLE_SIZE / 2,
-                self.hue_width * ((self.number_of_hues + 1)),
-            ),
-        )
-
-        self.circle.bgcolor = color
+        self.hue = max(0, min((x - CIRCLE_SIZE / 2) / (SLIDER_WIDTH - CIRCLE_SIZE), 1))
+        self.circle.left = self.hue * (SLIDER_WIDTH - CIRCLE_SIZE)
+        self.circle.bgcolor = rgb2hex(colorsys.hsv_to_rgb(self.hue, 1, 1))
         self.circle.update()
         self.on_change_hue(self.hue)
-        # self.update()
 
     def start_drag(self, e: ft.DragStartEvent):
         self.update_selected_hue(x=e.local_x)
@@ -73,7 +41,8 @@ class HueSlider(ft.GestureDetector):
         self.update_selected_hue(x=e.local_x)
 
     def generate_hues(self):
-        self.hue_width = (self.content.width - CIRCLE_SIZE) / (self.number_of_hues + 1)
+        # self.hue_width = (self.content.width - CIRCLE_SIZE) / (self.number_of_hues + 1)
+        self.hue_width = (SLIDER_WIDTH - CIRCLE_SIZE) / (self.number_of_hues + 1)
         for i in range(0, self.number_of_hues + 1):
             color = rgb2hex(colorsys.hsv_to_rgb(i / self.number_of_hues, 1, 1))
             if i == 0:
