@@ -108,7 +108,7 @@ class HueSlider(ft.GestureDetector):
         self.content.controls.append(self.circle)
 
 
-class CustomColorPicker(ft.Column):
+class ColorPicker(ft.Column):
     def __init__(self, color="#000000", color_block_size=20):
         super().__init__()
         self.tight = True
