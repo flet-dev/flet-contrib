@@ -3,11 +3,11 @@ import flet as ft
 # from customcolorpicker import CustomColorPicker
 # from palettecolorpicker import PaletteColorPicker
 
-from flet_contrib.color_picker import CustomColorPicker, PaletteColorPicker
+from flet_contrib.color_picker import ColorPicker, PaletteColorPicker
 
 
 def main(page: ft.Page):
-    color_picker = CustomColorPicker(color="#c8df6f")
+    color_picker = ColorPicker(color="#c8df6f")
 
     d = ft.AlertDialog(content=color_picker)
     page.dialog = d
