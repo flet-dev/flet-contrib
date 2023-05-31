@@ -15,7 +15,7 @@ class ColorPicker(ft.Column):
         self.color = color
         self.color_block_size = color_block_size
         self.hue_slider = HueSlider(
-            on_change_hue=self.update_color_matrix, hue=hex2hsv(self.color)[0]
+            on_change_hue=self.update_color_matrix, hue=hex2hsv(self.color)[0], number_of_hues=30
         )
         self.generate_color_matrix()
         self.generate_selected_color_view()
@@ -36,7 +36,6 @@ class ColorPicker(ft.Column):
         hue = hex2hsv(self.color)[0]
         self.update_circle_position()
         self.update_color_matrix(hue)
-        # self.hue_slider.update_hue_slider(hue)
         self.hue_slider.update()
 
     def update_circle_position(self):
