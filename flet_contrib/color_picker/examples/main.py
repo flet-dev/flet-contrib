@@ -3,7 +3,7 @@ import flet as ft
 # from customcolorpicker import CustomColorPicker
 # from palettecolorpicker import PaletteColorPicker
 
-from flet_contrib.color_picker import ColorPicker, PaletteColorPicker
+from flet_contrib.color_picker import ColorPicker
 
 
 def main(page: ft.Page):
