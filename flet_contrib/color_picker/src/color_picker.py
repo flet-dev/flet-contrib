@@ -23,6 +23,15 @@ class ColorPicker(ft.Column):
     def did_mount(self):
         self.update_color_picker()
 
+    def _build(self):
+        # called when the control is first added to a page
+        pass
+
+    def _before_build_command(self):
+        super()._before_build_command()
+        # called every time on self.update()
+        print("ON UPDATE")
+
     def update_color_picker(self):
         hue = hex2hsv(self.color)[0]
         self.update_circle_position()
