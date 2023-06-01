@@ -12,7 +12,7 @@ class HueSlider(ft.GestureDetector):
         self.__hue = hue
         self.__number_of_hues = number_of_hues
         self.content = ft.Stack(height=CIRCLE_SIZE, width=SLIDER_WIDTH)
-        self.generate_hues()
+        self.generate_slider()
         self.on_change_hue = on_change_hue
         self.on_pan_start = self.start_drag
         self.on_pan_update = self.drag
@@ -43,16 +43,16 @@ class HueSlider(ft.GestureDetector):
     def _before_build_command(self):
         super()._before_build_command()
         # called every time on self.update()
-        self.circle.left = self.__hue * (SLIDER_WIDTH - CIRCLE_SIZE)
-        self.circle.bgcolor = rgb2hex(colorsys.hsv_to_rgb(self.__hue, 1, 1))
+        self.thumb.left = self.__hue * (SLIDER_WIDTH - CIRCLE_SIZE)
+        self.thumb.bgcolor = rgb2hex(colorsys.hsv_to_rgb(self.__hue, 1, 1))
 
     def update_selected_hue(self, x):
         self.__hue = max(
             0, min((x - CIRCLE_SIZE / 2) / (SLIDER_WIDTH - CIRCLE_SIZE), 1)
         )
-        self.circle.left = self.__hue * (SLIDER_WIDTH - CIRCLE_SIZE)
-        self.circle.bgcolor = rgb2hex(colorsys.hsv_to_rgb(self.__hue, 1, 1))
-        self.circle.update()
+        self.thumb.left = self.__hue * (SLIDER_WIDTH - CIRCLE_SIZE)
+        self.thumb.bgcolor = rgb2hex(colorsys.hsv_to_rgb(self.__hue, 1, 1))
+        self.thumb.update()
         self.on_change_hue(self.__hue)
 
     def start_drag(self, e: ft.DragStartEvent):
@@ -61,33 +61,54 @@ class HueSlider(ft.GestureDetector):
     def drag(self, e: ft.DragUpdateEvent):
         self.update_selected_hue(x=e.local_x)
 
-    def generate_hues(self):
-        # self.hue_width = (self.content.width - CIRCLE_SIZE) / (self.number_of_hues + 1)
-        self.hue_width = (SLIDER_WIDTH - CIRCLE_SIZE) / (self.__number_of_hues + 1)
-        for i in range(0, self.__number_of_hues + 1):
-            color = rgb2hex(colorsys.hsv_to_rgb(i / self.__number_of_hues, 1, 1))
-            if i == 0:
-                border_radius = ft.border_radius.only(top_left=5, bottom_left=5)
-            elif i == self.__number_of_hues:
-                border_radius = ft.border_radius.only(top_right=5, bottom_right=5)
-            else:
-                border_radius = None
-            self.content.controls.append(
-                ft.Container(
-                    height=CIRCLE_SIZE / 2,
-                    width=self.hue_width,
-                    bgcolor=color,
-                    border_radius=border_radius,
-                    top=CIRCLE_SIZE / 4,
-                    left=i * self.hue_width + CIRCLE_SIZE / 2,
-                )
-            )
+    def generate_gradient_colors(self, number_of_hues):
+        colors = []
+        for i in range(0, number_of_hues + 1):
+            color = rgb2hex(colorsys.hsv_to_rgb(i / number_of_hues, 1, 1))
+            colors.append(color)
+        return colors
 
-        self.circle = ft.Container(
+    def generate_slider(self):
+        # self.hue_width = (self.content.width - CIRCLE_SIZE) / (self.number_of_hues + 1)
+        # self.hue_width = (SLIDER_WIDTH - CIRCLE_SIZE) / (self.__number_of_hues + 1)
+        # for i in range(0, self.__number_of_hues + 1):
+        #     color = rgb2hex(colorsys.hsv_to_rgb(i / self.__number_of_hues, 1, 1))
+        #     if i == 0:
+        #         border_radius = ft.border_radius.only(top_left=5, bottom_left=5)
+        #     elif i == self.__number_of_hues:
+        #         border_radius = ft.border_radius.only(top_right=5, bottom_right=5)
+        #     else:
+        #         border_radius = None
+        #     self.content.controls.append(
+        #         ft.Container(
+        #             height=CIRCLE_SIZE / 2,
+        #             width=self.hue_width,
+        #             bgcolor=color,
+        #             border_radius=border_radius,
+        #             top=CIRCLE_SIZE / 4,
+        #             left=i * self.hue_width + CIRCLE_SIZE / 2,
+        #         )
+        #     )
+
+        self.track = ft.Container(
+            gradient=ft.LinearGradient(
+                begin=ft.alignment.center_left,
+                end=ft.alignment.center_right,
+                colors=self.generate_gradient_colors(10),
+            ),
+            width=SLIDER_WIDTH - CIRCLE_SIZE,
+            height=CIRCLE_SIZE / 2,
+            border_radius=5,
+            top=CIRCLE_SIZE / 4,
+            left=CIRCLE_SIZE / 2,
+        )
+
+        self.thumb = ft.Container(
             width=CIRCLE_SIZE,
             height=CIRCLE_SIZE,
             border_radius=CIRCLE_SIZE,
             border=ft.border.all(width=2, color="white"),
         )
 
-        self.content.controls.append(self.circle)
+        self.content.controls.append(self.track)
+        self.content.controls.append(self.thumb)
