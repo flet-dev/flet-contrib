@@ -9,13 +9,13 @@ CIRCLE_SIZE = 20
 
 
 class ColorPicker(ft.Column):
-    def __init__(self, color="#000000", color_block_size=30):
+    def __init__(self, color="#000000"):
         super().__init__()
         self.tight = True
         self.__color = color
-        self.color_block_size = color_block_size
         self.hue_slider = HueSlider(
-            on_change_hue=self.update_color_matrix, hue=hex2hsv(self.color)[0]
+            on_change_hue=self.update_color_picker_on_hue_change,
+            hue=hex2hsv(self.color)[0],
         )
         self.generate_color_matrix()
         self.generate_selected_color_view()
@@ -39,29 +39,15 @@ class ColorPicker(ft.Column):
         self.update_selected_color_view_values()
         print("ON UPDATE")
 
-    # def update_color_picker(self):
-    #     self.hue_slider.hue = hex2hsv(self.__color)[0]
-    #     self.update_circle_position()
-    #     self.update_color_matrix(self.hue_slider.hue)
-    #     self.hue_slider.update()
-
     def update_circle_position(self):
         hsv_color = hex2hsv(self.color)
-
-        # s * width
-        self.circle.left = hsv_color[1] * self.color_field.width
-
-        # (1-v)*height
-        self.circle.top = (1 - hsv_color[2]) * self.color_field.height
-        # self.circle.update()
+        self.circle.left = hsv_color[1] * self.color_field.width  # s * width
+        self.circle.top = (1 - hsv_color[2]) * self.color_field.height  # (1-v)*height
 
     def find_color(self, x, y):
-        # x / color matrix container width
-        s = x / self.color_field.width
-
-        # (height - y)/height
-        v = (self.color_field.height - y) / self.color_field.height
         h = self.hue_slider.hue
+        s = x / self.color_field.width
+        v = (self.color_field.height - y) / self.color_field.height
         self.color = rgb2hex(colorsys.hsv_to_rgb(h, s, v))
 
     def generate_selected_color_view(self):
@@ -78,7 +64,6 @@ class ColorPicker(ft.Column):
                 int(self.b.value) / 255,
             )
             self.color = rgb2hex(rgb)
-            # self.update_color_picker()
             self.update()
 
         self.hex = ft.TextField(
@@ -143,10 +128,6 @@ class ColorPicker(ft.Column):
 
         self.controls.append(self.selected_color_view)
 
-    def update_selected_color_view(self):
-        self.update_selected_color_view_values()
-        self.selected_color_view.update()
-
     def update_selected_color_view_values(self):
         rgb = hex2rgb(self.color)
         self.selected_color_view.controls[0].controls[
@@ -175,16 +156,15 @@ class ColorPicker(ft.Column):
                 ),
             )
             self.find_color(x=self.circle.left, y=self.circle.top)
+            self.circle.update()
+            self.update_selected_color_view_values()
+            self.selected_color_view.update()
 
         def on_pan_start(e: ft.DragStartEvent):
             move_circle(x=e.local_x, y=e.local_y)
-            self.circle.update()
-            self.update_selected_color_view()
 
         def on_pan_update(e: ft.DragUpdateEvent):
             move_circle(x=e.local_x, y=e.local_y)
-            self.circle.update()
-            self.update_selected_color_view()
 
         self.color_matrix = ft.GestureDetector(
             content=ft.Stack(
@@ -215,7 +195,6 @@ class ColorPicker(ft.Column):
                 begin=ft.alignment.top_center,
                 end=ft.alignment.bottom_center,
                 colors=[ft.colors.WHITE, ft.colors.BLACK],
-                # stops=[0.5, 1.0],
             ),
             border_radius=5,
             width=saturation_container.width,
@@ -243,10 +222,10 @@ class ColorPicker(ft.Column):
         ]
 
         self.color_field.content.gradient.colors = container_gradient_colors
-        new_color = rgb2hex(colorsys.hsv_to_rgb(h, s, v))
-        self.color = new_color
+        self.color = rgb2hex(colorsys.hsv_to_rgb(h, s, v))
 
-    def update_color_matrix(self):
-        self.update_color_field()
-        self.update_selected_color_view()
-        self.color_matrix.update()
+    def update_color_picker_on_hue_change(self):
+        s = hex2hsv(self.color)[1]
+        v = hex2hsv(self.color)[2]
+        self.color = rgb2hex(colorsys.hsv_to_rgb(self.hue_slider.hue, s, v))
+        self.update()
