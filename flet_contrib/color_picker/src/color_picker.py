@@ -30,7 +30,12 @@ class ColorPicker(ft.Column):
         self.__color = value
 
     def did_mount(self):
-        self.update_color_picker()
+        # self.update_color_picker()
+        self.hue_slider.hue = hex2hsv(self.__color)[0]
+        self.update_circle_position()
+        self.update_color_matrix(self.hue_slider.hue)
+
+        # self.hue_slider.update()
 
     def _build(self):
         # called when the control is first added to a page
@@ -179,9 +184,10 @@ class ColorPicker(ft.Column):
         self.g.value = rgb[1]  # G
         self.b.value = rgb[2]  # B
         self.circle.bgcolor = self.__color  # Color matrix circle
-        self.update()
+        self.selected_color_view.update()
+        self.circle.update()
 
-    def generate_color_matrix(self, hue=0):
+    def generate_color_matrix(self):
         self.colors_x = int(COLOR_MATRIX_WIDTH / self.color_block_size)
         self.colors_y = int(COLOR_MATRIX_HEIGHT / self.color_block_size)
 
@@ -227,13 +233,6 @@ class ColorPicker(ft.Column):
 
         for j in range(0, self.colors_y + 1):
             for i in range(0, self.colors_x + 1):
-                color = rgb2hex(
-                    colorsys.hsv_to_rgb(
-                        hue,
-                        (i) / self.colors_x,
-                        1 * (self.colors_y - j) / self.colors_y,
-                    )
-                )
                 if i == 0 and j == 0:
                     border_radius = ft.border_radius.only(top_left=5)
                 elif i == 0 and j == self.colors_y:
@@ -282,4 +281,5 @@ class ColorPicker(ft.Column):
         # )
         self.find_color(y=self.circle.top, x=self.circle.left)
         self.update_selected_color_view()
-        self.update()
+        self.color_matrix.update()
+        # self.update()

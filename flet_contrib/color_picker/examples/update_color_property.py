@@ -8,7 +8,7 @@ def main(page: ft.Page):
     new_color = ft.TextField(width=100)
 
     def change_color(e):
-        color_picker.__color = new_color.value
+        color_picker.color = new_color.value
         color_picker.update()
 
     page.add(
