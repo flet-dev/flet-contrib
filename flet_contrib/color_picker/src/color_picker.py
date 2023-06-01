@@ -289,11 +289,14 @@ class ColorPicker(ft.Column):
         self.controls.append(self.color_matrix)
 
     def update_color_matrix(self, hue):
-        colors = []
-        colors.append(rgb2hex(colorsys.hsv_to_rgb(hue, 0, 1)))
-        colors.append(rgb2hex(colorsys.hsv_to_rgb(hue, 1, 1)))
+        def generate_s(number_of_s, hue):
+            colors = []
+            for i in range(0, number_of_s + 1):
+                color = rgb2hex(colorsys.hsv_to_rgb(0.5, i / number_of_s, 1))
+                colors.append(color)
+            return colors
 
-        self.color_field.content.gradient.colors = colors
+        self.color_field.content.gradient.colors = generate_s(1, hue)
         self.find_color(y=self.circle.top, x=self.circle.left)
         self.update_selected_color_view()
         self.color_matrix.update()
