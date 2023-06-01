@@ -19,6 +19,7 @@ class ColorPicker(ft.Column):
         )
         self.generate_color_matrix()
         self.generate_selected_color_view()
+        self.width = COLOR_MATRIX_WIDTH
 
     # color
     @property
@@ -34,16 +35,15 @@ class ColorPicker(ft.Column):
         # called every time on self.update()
         self.hue_slider.hue = hex2hsv(self.color)[0]
         self.update_circle_position()
-        self.circle.bgcolor = self.color
         self.update_color_field()
         self.update_selected_color_view_values()
         print("ON UPDATE")
 
-    def update_color_picker(self):
-        self.hue_slider.hue = hex2hsv(self.__color)[0]
-        self.update_circle_position()
-        self.update_color_matrix(self.hue_slider.hue)
-        self.hue_slider.update()
+    # def update_color_picker(self):
+    #     self.hue_slider.hue = hex2hsv(self.__color)[0]
+    #     self.update_circle_position()
+    #     self.update_color_matrix(self.hue_slider.hue)
+    #     self.hue_slider.update()
 
     def update_circle_position(self):
         hsv_color = hex2hsv(self.color)
