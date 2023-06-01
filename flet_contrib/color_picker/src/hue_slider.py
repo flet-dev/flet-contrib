@@ -42,7 +42,7 @@ class HueSlider(ft.GestureDetector):
         self.thumb.left = self.__hue * self.track.width
         self.thumb.bgcolor = rgb2hex(colorsys.hsv_to_rgb(self.__hue, 1, 1))
         self.thumb.update()
-        self.on_change_hue(self.__hue)
+        self.on_change_hue()
 
     def start_drag(self, e: ft.DragStartEvent):
         self.update_selected_hue(x=e.local_x)
