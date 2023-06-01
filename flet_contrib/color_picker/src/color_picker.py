@@ -231,27 +231,61 @@ class ColorPicker(ft.Column):
             on_pan_update=on_pan_update,
         )
 
-        for j in range(0, self.colors_y + 1):
-            for i in range(0, self.colors_x + 1):
-                if i == 0 and j == 0:
-                    border_radius = ft.border_radius.only(top_left=5)
-                elif i == 0 and j == self.colors_y:
-                    border_radius = ft.border_radius.only(bottom_left=5)
-                elif i == self.colors_x and j == 0:
-                    border_radius = ft.border_radius.only(top_right=5)
-                elif i == self.colors_x and j == self.colors_y:
-                    border_radius = ft.border_radius.only(bottom_right=5)
-                else:
-                    border_radius = None
-                self.color_matrix.content.controls.append(
-                    ft.Container(
-                        height=self.color_block_size,
-                        width=self.color_block_size,
-                        border_radius=border_radius,
-                        top=j * self.color_block_size + CIRCLE_SIZE / 2,
-                        left=i * self.color_block_size + CIRCLE_SIZE / 2,
-                    )
-                )
+        # for j in range(0, self.colors_y + 1):
+        #     for i in range(0, self.colors_x + 1):
+        #         if i == 0 and j == 0:
+        #             border_radius = ft.border_radius.only(top_left=5)
+        #         elif i == 0 and j == self.colors_y:
+        #             border_radius = ft.border_radius.only(bottom_left=5)
+        #         elif i == self.colors_x and j == 0:
+        #             border_radius = ft.border_radius.only(top_right=5)
+        #         elif i == self.colors_x and j == self.colors_y:
+        #             border_radius = ft.border_radius.only(bottom_right=5)
+        #         else:
+        #             border_radius = None
+        #         self.color_matrix.content.controls.append(
+        #             ft.Container(
+        #                 height=self.color_block_size,
+        #                 width=self.color_block_size,
+        #                 border_radius=border_radius,
+        #                 top=j * self.color_block_size + CIRCLE_SIZE / 2,
+        #                 left=i * self.color_block_size + CIRCLE_SIZE / 2,
+        #             )
+        #         )
+
+        def generate_s(hue):
+            colors = []
+            for i in range(0, 2):
+                color = rgb2hex(colorsys.hsv_to_rgb(hue, i, 1))
+                colors.append(color)
+            return colors
+
+        hue = 0.5
+
+        c_s = ft.Container(
+            gradient=ft.LinearGradient(
+                begin=ft.alignment.center_left,
+                end=ft.alignment.center_right,
+                colors=generate_s(hue),
+            ),
+            width=COLOR_MATRIX_WIDTH - CIRCLE_SIZE,
+            height=COLOR_MATRIX_HEIGHT - CIRCLE_SIZE,
+            border_radius=5,
+        )
+
+        self.color_view = ft.ShaderMask(
+            top=CIRCLE_SIZE / 2,
+            left=CIRCLE_SIZE / 2,
+            content=c_s,
+            blend_mode=ft.BlendMode.MULTIPLY,
+            shader=ft.LinearGradient(
+                begin=ft.alignment.top_center,
+                end=ft.alignment.bottom_center,
+                colors=[ft.colors.WHITE, ft.colors.BLACK],
+                # stops=[0.5, 1.0],
+            ),
+            border_radius=5,
+        )
 
         self.circle = ft.Container(
             width=CIRCLE_SIZE,
@@ -260,25 +294,27 @@ class ColorPicker(ft.Column):
             border=ft.border.all(width=2, color="white"),
         )
 
+        self.color_matrix.content.controls.append(self.color_view)
         self.color_matrix.content.controls.append(self.circle)
         self.controls.append(self.color_matrix)
 
     def update_color_matrix(self, hue):
-        n = 0
-        for j in range(0, self.colors_y + 1):
-            for i in range(0, self.colors_x + 1):
-                color = rgb2hex(
-                    colorsys.hsv_to_rgb(
-                        hue,
-                        (i) / self.colors_x,
-                        1 * (self.colors_y - j) / self.colors_y,
-                    )
-                )
-                self.color_matrix.content.controls[n].bgcolor = color
-                n += 1
+        # n = 0
+        # for j in range(0, self.colors_y + 1):
+        #     for i in range(0, self.colors_x + 1):
+        #         color = rgb2hex(
+        #             colorsys.hsv_to_rgb(
+        #                 hue,
+        #                 (i) / self.colors_x,
+        #                 1 * (self.colors_y - j) / self.colors_y,
+        #             )
+        #         )
+        #         self.color_matrix.content.controls[n].bgcolor = color
+        #         n += 1
         # self.find_color(
         #     y=self.circle.top + CIRCLE_SIZE / 2, x=self.circle.left + CIRCLE_SIZE / 2
         # )
+        print(hue)
         self.find_color(y=self.circle.top, x=self.circle.left)
         self.update_selected_color_view()
         self.color_matrix.update()
