@@ -9,7 +9,7 @@ CIRCLE_SIZE = 16
 
 
 class ColorPicker(ft.Column):
-    def __init__(self, color="#000000", color_block_size=20):
+    def __init__(self, color="#000000", color_block_size=30):
         super().__init__()
         self.tight = True
         self.color = color
@@ -30,6 +30,10 @@ class ColorPicker(ft.Column):
     def _before_build_command(self):
         super()._before_build_command()
         # called every time on self.update()
+        # self.hue_slider.hue = hex2hsv(self.color)[0]
+        # self.hue_slider.update()
+        # self.update_circle_position()
+        # self.update_color_matrix(self.hue_slider.hue)
         print("ON UPDATE")
 
     def update_color_picker(self):
@@ -43,12 +47,16 @@ class ColorPicker(ft.Column):
         # self.circle.left = (
         #     hsv_color[1] * self.colors_x
         # ) * self.color_block_size + self.color_block_size / 2
-        self.circle.left = hsv_color[1] * COLOR_MATRIX_WIDTH
+        self.circle.left = hsv_color[1] * (
+            (self.colors_x + 1) * self.color_block_size
+        )  # s * width
         # self.circle.top = (
         #     self.colors_y * (1 - hsv_color[2]) * self.color_block_size
         #     + self.color_block_size / 2
         # )
-        self.circle.top = (1 - hsv_color[2]) * COLOR_MATRIX_HEIGHT
+        self.circle.top = (1 - hsv_color[2]) * (
+            (self.colors_y + 1) * self.color_block_size
+        )  # (1-v)*height
         self.circle.update()
 
     def find_color(self, x, y):
@@ -62,10 +70,13 @@ class ColorPicker(ft.Column):
         #         and x <= color_square.left + self.color_block_size
         #     ):
         #         self.color = color_square.bgcolor
-        s = x / ((self.colors_x + 1) * self.color_block_size)
+
+        s = x / (
+            (self.colors_x + 1) * self.color_block_size
+        )  # x / color matrix container width
         v = ((self.colors_y + 1) * self.color_block_size - y) / (
             (self.colors_y + 1) * self.color_block_size
-        )
+        )  # (height - y)/height
         h = self.hue_slider.hue
         self.color = rgb2hex(colorsys.hsv_to_rgb(h, s, v))
 
@@ -257,8 +268,9 @@ class ColorPicker(ft.Column):
                 )
                 self.color_matrix.content.controls[n].bgcolor = color
                 n += 1
-        self.find_color(
-            y=self.circle.top + CIRCLE_SIZE / 2, x=self.circle.left + CIRCLE_SIZE / 2
-        )
+        # self.find_color(
+        #     y=self.circle.top + CIRCLE_SIZE / 2, x=self.circle.left + CIRCLE_SIZE / 2
+        # )
+        self.find_color(y=self.circle.top, x=self.circle.left)
         self.update_selected_color_view()
         self.update()
