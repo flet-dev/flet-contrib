@@ -58,27 +58,6 @@ class HueSlider(ft.GestureDetector):
         return colors
 
     def generate_slider(self):
-        # self.hue_width = (self.content.width - CIRCLE_SIZE) / (self.number_of_hues + 1)
-        # self.hue_width = (SLIDER_WIDTH - CIRCLE_SIZE) / (self.__number_of_hues + 1)
-        # for i in range(0, self.__number_of_hues + 1):
-        #     color = rgb2hex(colorsys.hsv_to_rgb(i / self.__number_of_hues, 1, 1))
-        #     if i == 0:
-        #         border_radius = ft.border_radius.only(top_left=5, bottom_left=5)
-        #     elif i == self.__number_of_hues:
-        #         border_radius = ft.border_radius.only(top_right=5, bottom_right=5)
-        #     else:
-        #         border_radius = None
-        #     self.content.controls.append(
-        #         ft.Container(
-        #             height=CIRCLE_SIZE / 2,
-        #             width=self.hue_width,
-        #             bgcolor=color,
-        #             border_radius=border_radius,
-        #             top=CIRCLE_SIZE / 4,
-        #             left=i * self.hue_width + CIRCLE_SIZE / 2,
-        #         )
-        #     )
-
         self.track = ft.Container(
             gradient=ft.LinearGradient(
                 begin=ft.alignment.center_left,

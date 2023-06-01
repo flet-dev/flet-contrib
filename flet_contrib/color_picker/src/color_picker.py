@@ -146,7 +146,6 @@ class ColorPicker(ft.Column):
     def update_selected_color_view(self):
         self.update_selected_color_view_values()
         self.selected_color_view.update()
-        self.circle.update()
 
     def update_selected_color_view_values(self):
         rgb = hex2rgb(self.color)
@@ -235,7 +234,6 @@ class ColorPicker(ft.Column):
         self.controls.append(self.color_matrix)
 
     def update_color_field(self):
-        # h = hex2hsv(self.color)[0]
         h = self.hue_slider.hue
         s = hex2hsv(self.color)[1]
         v = hex2hsv(self.color)[2]
@@ -252,4 +250,3 @@ class ColorPicker(ft.Column):
         self.update_color_field()
         self.update_selected_color_view()
         self.color_matrix.update()
-        # self.update()
