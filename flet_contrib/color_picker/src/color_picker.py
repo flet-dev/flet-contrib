@@ -191,19 +191,24 @@ class ColorPicker(ft.Column):
         self.colors_x = int(COLOR_MATRIX_WIDTH / self.color_block_size)
         self.colors_y = int(COLOR_MATRIX_HEIGHT / self.color_block_size)
 
+        self.color_view_width = COLOR_MATRIX_WIDTH - CIRCLE_SIZE
+        self.color_view_height = COLOR_MATRIX_HEIGHT - CIRCLE_SIZE
+
         def move_circle(x, y):
             self.circle.top = max(
                 0,
                 min(
                     y - CIRCLE_SIZE / 2,
-                    self.color_matrix.content.height - CIRCLE_SIZE,
+                    # self.color_matrix.content.height - CIRCLE_SIZE,
+                    self.color_view_height,
                 ),
             )
             self.circle.left = max(
                 0,
                 min(
                     x - CIRCLE_SIZE / 2,
-                    self.color_matrix.content.width - CIRCLE_SIZE,
+                    # self.color_matrix.content.width - CIRCLE_SIZE,
+                    self.color_view_width,
                 ),
             )
             # self.find_color(
@@ -253,7 +258,7 @@ class ColorPicker(ft.Column):
         #             )
         #         )
 
-        def generate_s(hue):
+        def generate_matrix_colors(hue):
             colors = []
             for i in range(0, 2):
                 color = rgb2hex(colorsys.hsv_to_rgb(hue, i, 1))
@@ -266,7 +271,7 @@ class ColorPicker(ft.Column):
             gradient=ft.LinearGradient(
                 begin=ft.alignment.center_left,
                 end=ft.alignment.center_right,
-                colors=generate_s(hue),
+                colors=generate_matrix_colors(hue),
             ),
             width=COLOR_MATRIX_WIDTH - CIRCLE_SIZE,
             height=COLOR_MATRIX_HEIGHT - CIRCLE_SIZE,
@@ -315,6 +320,15 @@ class ColorPicker(ft.Column):
         #     y=self.circle.top + CIRCLE_SIZE / 2, x=self.circle.left + CIRCLE_SIZE / 2
         # )
         print(hue)
+
+        def generate_matrix_colors(hue):
+            colors = []
+            for i in range(0, 2):
+                color = rgb2hex(colorsys.hsv_to_rgb(hue, i, 1))
+                colors.append(color)
+            return colors
+
+        self.color_view.content.gradient.colors = generate_matrix_colors(hue)
         self.find_color(y=self.circle.top, x=self.circle.left)
         self.update_selected_color_view()
         self.color_matrix.update()
