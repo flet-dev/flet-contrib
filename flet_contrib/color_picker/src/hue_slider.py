@@ -7,10 +7,10 @@ CIRCLE_SIZE = 16
 
 
 class HueSlider(ft.GestureDetector):
-    def __init__(self, on_change_hue, hue=1, number_of_hues=5):
+    def __init__(self, on_change_hue, hue=1):
         super().__init__()
         self.__hue = hue
-        self.__number_of_hues = number_of_hues
+        self.__number_of_hues = 10
         self.content = ft.Stack(height=CIRCLE_SIZE, width=SLIDER_WIDTH)
         self.generate_slider()
         self.on_change_hue = on_change_hue
@@ -30,15 +30,6 @@ class HueSlider(ft.GestureDetector):
                 raise Exception("Hue value should be between 0 and 1")
         else:
             raise Exception("Hue value should be a float number")
-
-    # number of hues
-    @property
-    def number_of_hues(self) -> int:
-        return self.__number_of_hues
-
-    @number_of_hues.setter
-    def number_of_hues(self, value: int):
-        self.__number_of_hues = value
 
     def _before_build_command(self):
         super()._before_build_command()
@@ -61,10 +52,10 @@ class HueSlider(ft.GestureDetector):
     def drag(self, e: ft.DragUpdateEvent):
         self.update_selected_hue(x=e.local_x)
 
-    def generate_gradient_colors(self, number_of_hues):
+    def generate_gradient_colors(self):
         colors = []
-        for i in range(0, number_of_hues + 1):
-            color = rgb2hex(colorsys.hsv_to_rgb(i / number_of_hues, 1, 1))
+        for i in range(0, self.__number_of_hues + 1):
+            color = rgb2hex(colorsys.hsv_to_rgb(i / self.__number_of_hues, 1, 1))
             colors.append(color)
         return colors
 
@@ -94,7 +85,7 @@ class HueSlider(ft.GestureDetector):
             gradient=ft.LinearGradient(
                 begin=ft.alignment.center_left,
                 end=ft.alignment.center_right,
-                colors=self.generate_gradient_colors(10),
+                colors=self.generate_gradient_colors(),
             ),
             width=SLIDER_WIDTH - CIRCLE_SIZE,
             height=CIRCLE_SIZE / 2,
