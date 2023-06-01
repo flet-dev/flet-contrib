@@ -3,9 +3,9 @@ import colorsys
 from .hue_slider import HueSlider
 from .utils import *
 
-COLOR_MATRIX_WIDTH = 280
-COLOR_MATRIX_HEIGHT = 160
-CIRCLE_SIZE = 16
+COLOR_MATRIX_WIDTH = 340
+COLOR_MATRIX_HEIGHT = 200
+CIRCLE_SIZE = 20
 
 
 class ColorPicker(ft.Column):
@@ -74,20 +74,10 @@ class ColorPicker(ft.Column):
         # self.circle.update()
 
     def find_color(self, x, y):
-        # for color_square in self.color_matrix.content.controls[
-        #     :-1
-        # ]:  # excluding the last element of the controls list which is the circle
-        #     if (
-        #         y >= color_square.top
-        #         and y <= color_square.top + self.color_block_size
-        #         and x >= color_square.left
-        #         and x <= color_square.left + self.color_block_size
-        #     ):
-        #         self.color = color_square.bgcolor
-
         s = x / (
             (self.colors_x + 1) * self.color_block_size
         )  # x / color matrix container width
+
         v = ((self.colors_y + 1) * self.color_block_size - y) / (
             (self.colors_y + 1) * self.color_block_size
         )  # (height - y)/height
@@ -269,7 +259,7 @@ class ColorPicker(ft.Column):
             border_radius=5,
         )
 
-        self.color_view = ft.ShaderMask(
+        self.color_field = ft.ShaderMask(
             top=CIRCLE_SIZE / 2,
             left=CIRCLE_SIZE / 2,
             content=c_s,
@@ -281,7 +271,11 @@ class ColorPicker(ft.Column):
                 # stops=[0.5, 1.0],
             ),
             border_radius=5,
+            width=c_s.width,
+            height=c_s.height,
         )
+
+        print(self.color_field.width)
 
         self.circle = ft.Container(
             width=CIRCLE_SIZE,
@@ -290,7 +284,7 @@ class ColorPicker(ft.Column):
             border=ft.border.all(width=2, color="white"),
         )
 
-        self.color_matrix.content.controls.append(self.color_view)
+        self.color_matrix.content.controls.append(self.color_field)
         self.color_matrix.content.controls.append(self.circle)
         self.controls.append(self.color_matrix)
 
@@ -299,7 +293,7 @@ class ColorPicker(ft.Column):
         colors.append(rgb2hex(colorsys.hsv_to_rgb(hue, 0, 1)))
         colors.append(rgb2hex(colorsys.hsv_to_rgb(hue, 1, 1)))
 
-        self.color_view.content.gradient.colors = colors
+        self.color_field.content.gradient.colors = colors
         self.find_color(y=self.circle.top, x=self.circle.left)
         self.update_selected_color_view()
         self.color_matrix.update()
