@@ -34,14 +34,12 @@ class HueSlider(ft.GestureDetector):
     def _before_build_command(self):
         super()._before_build_command()
         # called every time on self.update()
-        self.thumb.left = self.__hue * (SLIDER_WIDTH - CIRCLE_SIZE)
+        self.thumb.left = self.__hue * self.track.width
         self.thumb.bgcolor = rgb2hex(colorsys.hsv_to_rgb(self.__hue, 1, 1))
 
     def update_selected_hue(self, x):
-        self.__hue = max(
-            0, min((x - CIRCLE_SIZE / 2) / (SLIDER_WIDTH - CIRCLE_SIZE), 1)
-        )
-        self.thumb.left = self.__hue * (SLIDER_WIDTH - CIRCLE_SIZE)
+        self.__hue = max(0, min((x - CIRCLE_SIZE / 2) / self.track.width, 1))
+        self.thumb.left = self.__hue * self.track.width
         self.thumb.bgcolor = rgb2hex(colorsys.hsv_to_rgb(self.__hue, 1, 1))
         self.thumb.update()
         self.on_change_hue(self.__hue)
