@@ -15,7 +15,7 @@ class ColorPicker(ft.Column):
         self.color = color
         self.color_block_size = color_block_size
         self.hue_slider = HueSlider(
-            on_change_hue=self.update_color_matrix, hue=hex2hsv(self.color)[0], number_of_hues=30
+            on_change_hue=self.update_color_matrix, hue=hex2hsv(self.color)[0]
         )
         self.generate_color_matrix()
         self.generate_selected_color_view()
@@ -33,33 +33,41 @@ class ColorPicker(ft.Column):
         print("ON UPDATE")
 
     def update_color_picker(self):
-        hue = hex2hsv(self.color)[0]
+        self.hue_slider.hue = hex2hsv(self.color)[0]
         self.update_circle_position()
-        self.update_color_matrix(hue)
+        self.update_color_matrix(self.hue_slider.hue)
         self.hue_slider.update()
 
     def update_circle_position(self):
         hsv_color = hex2hsv(self.color)
-        self.circle.left = (
-            hsv_color[1] * self.colors_x
-        ) * self.color_block_size + self.color_block_size / 2
-        self.circle.top = (
-            self.colors_y * (1 - hsv_color[2]) * self.color_block_size
-            + self.color_block_size / 2
-        )
+        # self.circle.left = (
+        #     hsv_color[1] * self.colors_x
+        # ) * self.color_block_size + self.color_block_size / 2
+        self.circle.left = hsv_color[1] * COLOR_MATRIX_WIDTH
+        # self.circle.top = (
+        #     self.colors_y * (1 - hsv_color[2]) * self.color_block_size
+        #     + self.color_block_size / 2
+        # )
+        self.circle.top = (1 - hsv_color[2]) * COLOR_MATRIX_HEIGHT
         self.circle.update()
 
     def find_color(self, x, y):
-        for color_square in self.color_matrix.content.controls[
-            :-1
-        ]:  # excluding the last element of the controls list which is the circle
-            if (
-                y >= color_square.top
-                and y <= color_square.top + self.color_block_size
-                and x >= color_square.left
-                and x <= color_square.left + self.color_block_size
-            ):
-                self.color = color_square.bgcolor
+        # for color_square in self.color_matrix.content.controls[
+        #     :-1
+        # ]:  # excluding the last element of the controls list which is the circle
+        #     if (
+        #         y >= color_square.top
+        #         and y <= color_square.top + self.color_block_size
+        #         and x >= color_square.left
+        #         and x <= color_square.left + self.color_block_size
+        #     ):
+        #         self.color = color_square.bgcolor
+        s = x / ((self.colors_x + 1) * self.color_block_size)
+        v = ((self.colors_y + 1) * self.color_block_size - y) / (
+            (self.colors_y + 1) * self.color_block_size
+        )
+        h = self.hue_slider.hue
+        self.color = rgb2hex(colorsys.hsv_to_rgb(h, s, v))
 
     def generate_selected_color_view(self):
         rgb = hex2rgb(self.color)
@@ -172,17 +180,20 @@ class ColorPicker(ft.Column):
                     self.color_matrix.content.width - CIRCLE_SIZE,
                 ),
             )
-            self.find_color(
-                x=self.circle.left + CIRCLE_SIZE / 2,
-                y=self.circle.top + CIRCLE_SIZE / 2,
-            )
+            # self.find_color(
+            #     x=self.circle.left + CIRCLE_SIZE / 2,
+            #     y=self.circle.top + CIRCLE_SIZE / 2,
+            # )
+            self.find_color(x=self.circle.left, y=self.circle.top)
 
         def on_pan_start(e: ft.DragStartEvent):
             move_circle(x=e.local_x, y=e.local_y)
+            # self.find_color(x=e.local_x, y=e.local_y)
             self.update_selected_color_view()
 
         def on_pan_update(e: ft.DragUpdateEvent):
             move_circle(x=e.local_x, y=e.local_y)
+            # self.find_color(x=e.local_x, y=e.local_y)
             self.update_selected_color_view()
 
         self.color_matrix = ft.GestureDetector(
