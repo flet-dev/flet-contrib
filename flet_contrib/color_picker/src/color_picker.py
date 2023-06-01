@@ -299,7 +299,7 @@ class ColorPicker(ft.Column):
         def generate_s(number_of_s, hue):
             colors = []
             for i in range(0, number_of_s + 1):
-                color = rgb2hex(colorsys.hsv_to_rgb(0.5, i / number_of_s, 1))
+                color = rgb2hex(colorsys.hsv_to_rgb(hue, i / number_of_s, 1))
                 colors.append(color)
             return colors
 
