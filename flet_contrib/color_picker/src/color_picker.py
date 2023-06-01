@@ -58,29 +58,32 @@ class ColorPicker(ft.Column):
 
     def update_circle_position(self):
         hsv_color = hex2hsv(self.__color)
-        # self.circle.left = (
-        #     hsv_color[1] * self.colors_x
-        # ) * self.color_block_size + self.color_block_size / 2
-        self.circle.left = hsv_color[1] * (
-            (self.colors_x + 1) * self.color_block_size
-        )  # s * width
-        # self.circle.top = (
-        #     self.colors_y * (1 - hsv_color[2]) * self.color_block_size
-        #     + self.color_block_size / 2
+        # self.circle.left = hsv_color[1] * (
+        #     (self.colors_x + 1) * self.color_block_size
         # )
-        self.circle.top = (1 - hsv_color[2]) * (
-            (self.colors_y + 1) * self.color_block_size
-        )  # (1-v)*height
+        # s * width
+        self.circle.left = hsv_color[1] * self.color_field.width
+
+        # self.circle.top = (1 - hsv_color[2]) * (
+        #     (self.colors_y + 1) * self.color_block_size
+        # )
+        # (1-v)*height
+        self.circle.top = (1 - hsv_color[2]) * self.color_field.height
         # self.circle.update()
 
     def find_color(self, x, y):
-        s = x / (
-            (self.colors_x + 1) * self.color_block_size
-        )  # x / color matrix container width
+        # s = x / (
+        #     (self.colors_x + 1) * self.color_block_size
+        # )
+        # x / color matrix container width
+        s = x / self.color_field.width
 
-        v = ((self.colors_y + 1) * self.color_block_size - y) / (
-            (self.colors_y + 1) * self.color_block_size
-        )  # (height - y)/height
+        # v = ((self.colors_y + 1) * self.color_block_size - y) / (
+        #     (self.colors_y + 1) * self.color_block_size
+        # )
+
+        # (height - y)/height
+        v = (self.color_field.height - y) / self.color_field.height
         h = self.hue_slider.hue
         self.__color = rgb2hex(colorsys.hsv_to_rgb(h, s, v))
 
@@ -178,11 +181,11 @@ class ColorPicker(ft.Column):
         self.circle.update()
 
     def generate_color_matrix(self):
-        self.colors_x = int(COLOR_MATRIX_WIDTH / self.color_block_size)
-        self.colors_y = int(COLOR_MATRIX_HEIGHT / self.color_block_size)
+        # self.colors_x = int(COLOR_MATRIX_WIDTH / self.color_block_size)
+        # self.colors_y = int(COLOR_MATRIX_HEIGHT / self.color_block_size)
 
-        self.color_view_width = COLOR_MATRIX_WIDTH - CIRCLE_SIZE
-        self.color_view_height = COLOR_MATRIX_HEIGHT - CIRCLE_SIZE
+        # self.color_view_width = COLOR_MATRIX_WIDTH - CIRCLE_SIZE
+        # self.color_view_height = COLOR_MATRIX_HEIGHT - CIRCLE_SIZE
 
         def move_circle(x, y):
             self.circle.top = max(
@@ -190,7 +193,8 @@ class ColorPicker(ft.Column):
                 min(
                     y - CIRCLE_SIZE / 2,
                     # self.color_matrix.content.height - CIRCLE_SIZE,
-                    self.color_view_height,
+                    # self.color_view_height,
+                    self.color_field.height,
                 ),
             )
             self.circle.left = max(
@@ -198,7 +202,8 @@ class ColorPicker(ft.Column):
                 min(
                     x - CIRCLE_SIZE / 2,
                     # self.color_matrix.content.width - CIRCLE_SIZE,
-                    self.color_view_width,
+                    # self.color_view_width,
+                    self.color_field.width,
                 ),
             )
             # self.find_color(
@@ -219,8 +224,10 @@ class ColorPicker(ft.Column):
 
         self.color_matrix = ft.GestureDetector(
             content=ft.Stack(
-                height=(self.colors_y + 1) * self.color_block_size + CIRCLE_SIZE,
-                width=(self.colors_x + 1) * self.color_block_size + CIRCLE_SIZE,
+                # height=(self.colors_y + 1) * self.color_block_size + CIRCLE_SIZE,
+                # width=(self.colors_x + 1) * self.color_block_size + CIRCLE_SIZE,
+                height=COLOR_MATRIX_HEIGHT,
+                width=COLOR_MATRIX_WIDTH,
             ),
             on_pan_start=on_pan_start,
             on_pan_update=on_pan_update,
