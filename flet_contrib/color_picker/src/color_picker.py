@@ -258,20 +258,11 @@ class ColorPicker(ft.Column):
         #             )
         #         )
 
-        def generate_matrix_colors(hue):
-            colors = []
-            for i in range(0, 2):
-                color = rgb2hex(colorsys.hsv_to_rgb(hue, i, 1))
-                colors.append(color)
-            return colors
-
-        hue = 0.5
-
         c_s = ft.Container(
             gradient=ft.LinearGradient(
                 begin=ft.alignment.center_left,
                 end=ft.alignment.center_right,
-                colors=generate_matrix_colors(hue),
+                colors=[ft.colors.WHITE, ft.colors.RED],
             ),
             width=COLOR_MATRIX_WIDTH - CIRCLE_SIZE,
             height=COLOR_MATRIX_HEIGHT - CIRCLE_SIZE,
