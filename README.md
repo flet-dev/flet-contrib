@@ -2,6 +2,10 @@
 
 `flet-contrib` package includes reusable Flet controls written in Python only and using existing Flet primitives.
 
+## Controls
+
+* [ColorPicker](flet_contrib/color_picker) ([Live demo](https://flet-controls-gallery.fly.dev/contrib/colorpicker))
+
 ## Usage
 
 To install `flet-contrib` package:
