@@ -1,4 +1,4 @@
-# `flet-contrib` - Flet controls in Python by the community
+# Flet controls in Python by the community
 
 `flet-contrib` package includes reusable Flet controls written in Python only and using existing Flet primitives.
 
