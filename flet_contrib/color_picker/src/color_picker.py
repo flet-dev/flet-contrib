@@ -17,7 +17,7 @@ class ColorPicker(ft.Column):
             on_change_hue=self.update_color_picker_on_hue_change,
             hue=hex2hsv(self.color)[0],
         )
-        self.generate_color_matrix()
+        self.generate_color_map()
         self.generate_selected_color_view()
         self.width = COLOR_MATRIX_WIDTH
 
@@ -35,19 +35,19 @@ class ColorPicker(ft.Column):
         # called every time on self.update()
         self.hue_slider.hue = hex2hsv(self.color)[0]
         self.update_circle_position()
-        self.update_color_field()
+        self.update_color_map()
         self.update_selected_color_view_values()
         print("ON UPDATE")
 
     def update_circle_position(self):
         hsv_color = hex2hsv(self.color)
-        self.circle.left = hsv_color[1] * self.color_field.width  # s * width
-        self.circle.top = (1 - hsv_color[2]) * self.color_field.height  # (1-v)*height
+        self.thumb.left = hsv_color[1] * self.color_map.width  # s * width
+        self.thumb.top = (1 - hsv_color[2]) * self.color_map.height  # (1-v)*height
 
     def find_color(self, x, y):
         h = self.hue_slider.hue
-        s = x / self.color_field.width
-        v = (self.color_field.height - y) / self.color_field.height
+        s = x / self.color_map.width
+        v = (self.color_map.height - y) / self.color_map.height
         self.color = rgb2hex(colorsys.hsv_to_rgb(h, s, v))
 
     def generate_selected_color_view(self):
@@ -137,26 +137,26 @@ class ColorPicker(ft.Column):
         self.r.value = rgb[0]  # R
         self.g.value = rgb[1]  # G
         self.b.value = rgb[2]  # B
-        self.circle.bgcolor = self.color  # Color matrix circle
+        self.thumb.bgcolor = self.color  # Color matrix circle
 
-    def generate_color_matrix(self):
+    def generate_color_map(self):
         def move_circle(x, y):
-            self.circle.top = max(
+            self.thumb.top = max(
                 0,
                 min(
                     y - CIRCLE_SIZE / 2,
-                    self.color_field.height,
+                    self.color_map.height,
                 ),
             )
-            self.circle.left = max(
+            self.thumb.left = max(
                 0,
                 min(
                     x - CIRCLE_SIZE / 2,
-                    self.color_field.width,
+                    self.color_map.width,
                 ),
             )
-            self.find_color(x=self.circle.left, y=self.circle.top)
-            self.circle.update()
+            self.find_color(x=self.thumb.left, y=self.thumb.top)
+            self.thumb.update()
             self.update_selected_color_view_values()
             self.selected_color_view.update()
 
@@ -166,7 +166,7 @@ class ColorPicker(ft.Column):
         def on_pan_update(e: ft.DragUpdateEvent):
             move_circle(x=e.local_x, y=e.local_y)
 
-        self.color_matrix = ft.GestureDetector(
+        self.color_map_container = ft.GestureDetector(
             content=ft.Stack(
                 height=COLOR_MATRIX_HEIGHT,
                 width=COLOR_MATRIX_WIDTH,
@@ -186,7 +186,7 @@ class ColorPicker(ft.Column):
             border_radius=5,
         )
 
-        self.color_field = ft.ShaderMask(
+        self.color_map = ft.ShaderMask(
             top=CIRCLE_SIZE / 2,
             left=CIRCLE_SIZE / 2,
             content=saturation_container,
@@ -201,18 +201,18 @@ class ColorPicker(ft.Column):
             height=saturation_container.height,
         )
 
-        self.circle = ft.Container(
+        self.thumb = ft.Container(
             width=CIRCLE_SIZE,
             height=CIRCLE_SIZE,
             border_radius=CIRCLE_SIZE,
             border=ft.border.all(width=2, color="white"),
         )
 
-        self.color_matrix.content.controls.append(self.color_field)
-        self.color_matrix.content.controls.append(self.circle)
-        self.controls.append(self.color_matrix)
+        self.color_map_container.content.controls.append(self.color_map)
+        self.color_map_container.content.controls.append(self.thumb)
+        self.controls.append(self.color_map_container)
 
-    def update_color_field(self):
+    def update_color_map(self):
         h = self.hue_slider.hue
         s = hex2hsv(self.color)[1]
         v = hex2hsv(self.color)[2]
@@ -221,7 +221,7 @@ class ColorPicker(ft.Column):
             rgb2hex(colorsys.hsv_to_rgb(h, 1, 1)),
         ]
 
-        self.color_field.content.gradient.colors = container_gradient_colors
+        self.color_map.content.gradient.colors = container_gradient_colors
         self.color = rgb2hex(colorsys.hsv_to_rgb(h, s, v))
 
     def update_color_picker_on_hue_change(self):
