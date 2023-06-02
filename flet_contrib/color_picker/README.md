@@ -2,7 +2,7 @@
 
 `ColorPicker` control is used for picking a color from color map in hex (rgb) format.
 
-`ColorPicker` inherits from [Column](https://flet.dev/docs/controls/column) and can be used as a content for [`AlertDialog`](https://flet.dev/docs/controls/alertdialog) or other control or placed directly on a page.
+`ColorPicker` inherits from [`Column`](https://flet.dev/docs/controls/column) and can be used as a content for [`AlertDialog`](https://flet.dev/docs/controls/alertdialog) or other control or placed directly on a page.
 
 ## Examples
 
