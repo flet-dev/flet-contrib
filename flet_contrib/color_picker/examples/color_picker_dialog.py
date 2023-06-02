@@ -4,7 +4,7 @@ from flet_contrib.color_picker import ColorPicker
 
 
 def main(page: ft.Page):
-    color_picker = ColorPicker(color="#c8df6f")
+    color_picker = ColorPicker(color="#c8df6f", width=300)
 
     d = ft.AlertDialog(content=color_picker)
     page.dialog = d

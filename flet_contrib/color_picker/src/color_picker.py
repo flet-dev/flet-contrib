@@ -4,14 +4,15 @@ from .hue_slider import HueSlider
 from .utils import *
 
 COLOR_MATRIX_WIDTH = 340
-COLOR_MATRIX_HEIGHT = 200
+# COLOR_MATRIX_HEIGHT = 200
 CIRCLE_SIZE = 20
 
 
 class ColorPicker(ft.Column):
-    def __init__(self, color="#000000"):
+    def __init__(self, color="#000000", width=COLOR_MATRIX_WIDTH):
         super().__init__()
         self.tight = True
+        self.width = width
         self.__color = color
         self.hue_slider = HueSlider(
             on_change_hue=self.update_color_picker_on_hue_change,
@@ -19,7 +20,6 @@ class ColorPicker(ft.Column):
         )
         self.generate_color_map()
         self.generate_selected_color_view()
-        self.width = COLOR_MATRIX_WIDTH
 
     # color
     @property
@@ -168,8 +168,8 @@ class ColorPicker(ft.Column):
 
         self.color_map_container = ft.GestureDetector(
             content=ft.Stack(
-                height=COLOR_MATRIX_HEIGHT,
-                width=COLOR_MATRIX_WIDTH,
+                width=self.width,
+                height=int(self.width * 3 / 5),
             ),
             on_pan_start=on_pan_start,
             on_pan_update=on_pan_update,
@@ -181,8 +181,8 @@ class ColorPicker(ft.Column):
                 end=ft.alignment.center_right,
                 colors=[ft.colors.WHITE, ft.colors.RED],
             ),
-            width=COLOR_MATRIX_WIDTH - CIRCLE_SIZE,
-            height=COLOR_MATRIX_HEIGHT - CIRCLE_SIZE,
+            width=self.color_map_container.content.width - CIRCLE_SIZE,
+            height=self.color_map_container.content.height - CIRCLE_SIZE,
             border_radius=5,
         )
 
