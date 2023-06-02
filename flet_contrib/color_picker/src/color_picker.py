@@ -4,7 +4,6 @@ from .hue_slider import HueSlider
 from .utils import *
 
 COLOR_MATRIX_WIDTH = 340
-# COLOR_MATRIX_HEIGHT = 200
 CIRCLE_SIZE = 20
 
 
@@ -156,9 +155,10 @@ class ColorPicker(ft.Column):
                 ),
             )
             self.find_color(x=self.thumb.left, y=self.thumb.top)
-            self.thumb.update()
+
             self.update_selected_color_view_values()
             self.selected_color_view.update()
+            self.thumb.update()
 
         def on_pan_start(e: ft.DragStartEvent):
             move_circle(x=e.local_x, y=e.local_y)
@@ -222,10 +222,11 @@ class ColorPicker(ft.Column):
         ]
 
         self.color_map.content.gradient.colors = container_gradient_colors
+
         self.color = rgb2hex(colorsys.hsv_to_rgb(h, s, v))
 
     def update_color_picker_on_hue_change(self):
-        s = hex2hsv(self.color)[1]
-        v = hex2hsv(self.color)[2]
-        self.color = rgb2hex(colorsys.hsv_to_rgb(self.hue_slider.hue, s, v))
-        self.update()
+        self.update_color_map()
+        self.update_selected_color_view_values()
+        self.selected_color_view.update()
+        self.color_map_container.update()
