@@ -8,7 +8,7 @@ def main(page: ft.Page):
         d.open = True
         page.update()
 
-    color_picker = ColorPicker(color="#c8df6f", width=300)
+    color_picker = ColorPicker(color="#c8df6f", width=400)
     color_icon = ft.IconButton(icon=ft.icons.BRUSH, on_click=open_color_picker)
 
     def change_color(e):
