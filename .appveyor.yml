@@ -1,0 +1,42 @@
+skip_branch_with_pr: true
+
+skip_commits:
+  files:
+    - docs/**/*
+    - media/**/*
+    - "*.md"
+
+environment:
+  TWINE_USERNAME: __token__
+  TWINE_PASSWORD:
+    secure: 174ncAbF5IjSIkmioPt62jeSnzmTlRNchUkE4QdjDWH8xK1olYtySXLJpo2q95HcP7lWJky1hv4APESiRRHnBWoY0XRFafzM/mbCDMzG1tZXiXZmpP1qzHAtRP2QSCIg18xh1TMktraUdTi7sbJnjjRhqzgbW1k0kLBxKw79MPFBhYQ/TiGcmaYWZbWVZNY3HCUCb6Dt7bG1OE2Ul9rD1gvs55xwO9Oq9FOVA1VnMYw=
+  TWINE_NON_INTERACTIVE: true
+
+stack:
+- python 3.10
+
+install:
+- python --version
+- pip install --upgrade setuptools wheel twine poetry tomlkit virtualenv
+- poetry install
+
+build_script:
+# patch version
+- ps: |
+    $ErrorActionPreference = "Stop"
+    $env:PYPI_VER = $env:APPVEYOR_BUILD_VERSION.replace("+", ".dev")
+- python3 .ci/patch_toml.py pyproject.toml $PYPI_VER
+
+# build package
+- poetry build
+
+# publish package
+- sh: |
+    if [[ ("$APPVEYOR_REPO_BRANCH" == "main" || "$APPVEYOR_REPO_TAG_NAME" != "") && "$APPVEYOR_PULL_REQUEST_NUMBER" == "" ]]; then
+        twine upload dist/*
+    fi
+
+artifacts:
+- path: dist/*
+
+test: off
