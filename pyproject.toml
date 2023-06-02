@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "flet-contrib"
+version = "0.1.0"
+description = "Flet controls written in Python by community"
+authors = ["Appveyor Systems Inc. <hello@flet.dev>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "flet_contrib"}]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+flet = "^0.7.4"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
