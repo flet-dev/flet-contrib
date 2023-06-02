@@ -6,7 +6,7 @@
 
 ## Examples
 
-[Live example](https://flet-controls-gallery.fly.dev/contribs/colorpicker)
+[Live example](https://flet-controls-gallery.fly.dev/contrib/colorpicker)
 
 ### ColorPicker dialog
 
