@@ -18,15 +18,19 @@ stack:
 - python 3.10
 
 install:
+- ps: |
+    if ($env:APPVEYOR_REPO_TAG_NAME) {
+      $env:PYPI_VER = $env:APPVEYOR_REPO_TAG_NAME.replace("v", "")
+    } else {
+      $env:PYPI_VER = "$($env:APPVEYOR_BUILD_VERSION).dev0"
+    }
+    Update-AppveyorBuild -Version $PYPI_VER
 - python --version
 - pip install --upgrade setuptools wheel twine poetry tomlkit virtualenv
 - poetry install
 
 build_script:
 # patch version
-- ps: |
-    $ErrorActionPreference = "Stop"
-    $env:PYPI_VER = $env:APPVEYOR_BUILD_VERSION.replace("+", ".dev")
 - python3 .ci/patch_toml.py pyproject.toml $PYPI_VER
 
 # build package
