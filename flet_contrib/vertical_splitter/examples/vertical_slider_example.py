@@ -15,7 +15,8 @@ def main(page: ft.Page):
     )
 
     vertical_splitter = VerticalSplitter(
-        height=400,
+        # height=400,
+        expand=True,
         right_pane=c_right,
         left_pane=c_left,
         fixed_pane="right",

@@ -6,15 +6,16 @@ class VerticalSplitter(ft.Row):
         self,
         right_pane,
         left_pane,
-        height,
         spacing=0,
         fixed_pane_min_width=50,
         fixed_pane_max_width=300,
         fixed_pane_width=100,
         fixed_pane="left",
         width=None,
+        height=400,
+        expand=False,
     ):
-        super().__init__(width=width, height=height, spacing=spacing)
+        super().__init__(width=width, height=height, spacing=spacing, expand=expand)
         self.fixed_pane_min_width = fixed_pane_min_width
         self.fixed_pane_max_width = fixed_pane_max_width
         self.fixed_pane_width = fixed_pane_width
