@@ -7,7 +7,7 @@ class VerticalSplitter(ft.Row):
         right_pane,
         left_pane,
         height,
-        spacing,
+        spacing=0,
         fixed_pane_min_width=50,
         fixed_pane_max_width=300,
         fixed_pane_width=100,
@@ -15,8 +15,6 @@ class VerticalSplitter(ft.Row):
         width=None,
     ):
         super().__init__(width=width, height=height, spacing=spacing)
-        # self.right_pane = right_pane
-        # self.left_pane = left_pane
         self.fixed_pane_min_width = fixed_pane_min_width
         self.fixed_pane_max_width = fixed_pane_max_width
         self.fixed_pane_width = fixed_pane_width
@@ -48,13 +46,7 @@ class VerticalSplitter(ft.Row):
         ]
 
     def move_vertical_splitter(self, e: ft.DragUpdateEvent):
-        if self.fixed_pane == "right":
-            if (
-                e.delta_x > 0 and self.right_pane.width > self.fixed_pane_min_width
-            ) or (e.delta_x < 0 and self.right_pane.width < self.fixed_pane_max_width):
-                self.right_pane.width += e.delta_x
-            self.right_pane.update()
-        elif self.fixed_pane == "left":
+        if self.fixed_pane == "left":
             if (
                 e.delta_x > 0 and self.left_container.width < self.fixed_pane_max_width
             ) or (
@@ -62,6 +54,15 @@ class VerticalSplitter(ft.Row):
             ):
                 self.left_container.width += e.delta_x
             self.left_container.update()
+
+        if self.fixed_pane == "right":
+            if (
+                e.delta_x > 0 and self.right_container.width > self.fixed_pane_min_width
+            ) or (
+                e.delta_x < 0 and self.right_container.width < self.fixed_pane_max_width
+            ):
+                self.right_container.width -= e.delta_x
+            self.right_container.update()
 
     def show_draggable_cursor(self, e: ft.HoverEvent):
         e.control.mouse_cursor = ft.MouseCursor.RESIZE_LEFT_RIGHT
@@ -76,20 +77,15 @@ def main(page: ft.Page):
     c_left = ft.Container(
         bgcolor=ft.colors.ORANGE_300,
         alignment=ft.alignment.center,
-        # width=100,
-        # expand=1,
     )
 
     c_right = ft.Container(
         bgcolor=ft.colors.BROWN_400,
         alignment=ft.alignment.center,
-        # width=100,
-        # expand=1,
     )
 
     vertical_splitter = VerticalSplitter(
         height=400,
-        spacing=0,
         right_pane=c_right,
         left_pane=c_left,
         fixed_pane="left",
