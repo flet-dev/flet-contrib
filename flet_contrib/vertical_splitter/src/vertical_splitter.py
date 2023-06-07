@@ -15,8 +15,8 @@ class VerticalSplitter(ft.Row):
         width=None,
     ):
         super().__init__(width=width, height=height, spacing=spacing)
-        self.right_pane = right_pane
-        self.left_pane = left_pane
+        # self.right_pane = right_pane
+        # self.left_pane = left_pane
         self.fixed_pane_min_width = fixed_pane_min_width
         self.fixed_pane_max_width = fixed_pane_max_width
         self.fixed_pane_width = fixed_pane_width
@@ -27,23 +27,18 @@ class VerticalSplitter(ft.Row):
             on_pan_update=self.move_vertical_splitter,
             on_hover=self.show_draggable_cursor,
         )
-        # self.controls = [
-        #     ft.Container(self.left_pane),
-        #     self.splitter,
-        #     self.right_pane,
-        # ]
-        self.generate_layout()
+        self.generate_layout(left_pane, right_pane)
 
-    def generate_layout(self):
+    def generate_layout(self, left_pane, right_pane):
         if self.fixed_pane == "left":
             self.left_container = ft.Container(
-                width=self.fixed_pane_width, content=self.left_pane
+                width=self.fixed_pane_width, content=left_pane
             )
-            self.right_container = ft.Container(expand=1, content=self.right_pane)
+            self.right_container = ft.Container(expand=1, content=right_pane)
         elif self.fixed_pane == "right":
-            self.left_container = ft.Container(expand=1, content=self.left_pane)
+            self.left_container = ft.Container(expand=1, content=left_pane)
             self.right_container = ft.Container(
-                width=self.fixed_pane_width, content=self.right_pane
+                width=self.fixed_pane_width, content=right_pane
             )
 
         self.controls = [
