@@ -10,6 +10,7 @@ class VerticalSplitter(ft.Row):
         spacing,
         min_width,
         max_width,
+        fixed_pane="left",
         width=None,
     ):
         super().__init__(width=width, height=height, spacing=spacing)
@@ -17,6 +18,7 @@ class VerticalSplitter(ft.Row):
         self.left_pane = left_pane
         self.min_width = min_width
         self.max_width = max_width
+        self.fixed_pane = fixed_pane
         self.splitter = ft.GestureDetector(
             content=ft.VerticalDivider(),
             drag_interval=10,
@@ -65,6 +67,7 @@ def main(page: ft.Page):
         spacing=0,
         right_pane=c_right,
         left_pane=c_left,
+        fixed_pane="left",
         min_width=50,
         max_width=300,
     )
