@@ -28,16 +28,15 @@ class VerticalSplitter(ft.Row):
         self.generate_layout(left_pane, right_pane)
 
     def generate_layout(self, left_pane, right_pane):
+        self.left_container = ft.Container(content=left_pane)
+        self.right_container = ft.Container(content=right_pane)
         if self.fixed_pane == "left":
-            self.left_container = ft.Container(
-                width=self.fixed_pane_width, content=left_pane
-            )
-            self.right_container = ft.Container(expand=1, content=right_pane)
+            self.left_container.width = self.fixed_pane_width
+            self.right_container.expand = 1
+
         elif self.fixed_pane == "right":
-            self.left_container = ft.Container(expand=1, content=left_pane)
-            self.right_container = ft.Container(
-                width=self.fixed_pane_width, content=right_pane
-            )
+            self.right_container.width = self.fixed_pane_width
+            self.left_container.expand = 1
 
         self.controls = [
             self.left_container,
@@ -88,7 +87,7 @@ def main(page: ft.Page):
         height=400,
         right_pane=c_right,
         left_pane=c_left,
-        fixed_pane="left",
+        fixed_pane="right",
         fixed_pane_min_width=50,
         fixed_pane_max_width=300,
         fixed_pane_width=100,
