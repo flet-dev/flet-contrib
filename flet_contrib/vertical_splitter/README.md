@@ -1,6 +1,6 @@
 # VerticalSplitter
 
-`VerticalSplitter` control is used for building layout with left and right content devided by a vertical line that can be dragged in the left or right direction.
+`VerticalSplitter` control is used for building layout with left and right panes divided by a vertical line that can be dragged in the left or right direction.
 
 `VerticalSplitter` inherits from [`Row`](https://flet.dev/docs/controls/row).
 
@@ -18,6 +18,12 @@
 
 ## Properties
 
-### `left`
+### `left_pane`
 
-### `right`
+### `right_pane`
+
+### `fixed_content`: "left" (default), "right" 
+
+### `min_width`
+
+### `max_width`
