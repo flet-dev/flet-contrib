@@ -2,10 +2,21 @@ import flet as ft
 
 
 class VerticalSplitter(ft.Row):
-    def __init__(self, right_content, left_content, height, spacing, width=None):
+    def __init__(
+        self,
+        right_content,
+        left_content,
+        height,
+        spacing,
+        min_width,
+        max_width,
+        width=None,
+    ):
         super().__init__(width=width, height=height, spacing=spacing)
         self.right_content = right_content
         self.left_content = left_content
+        self.min_width = min_width
+        self.max_width = max_width
         self.splitter = ft.GestureDetector(
             content=ft.VerticalDivider(),
             drag_interval=10,
@@ -13,14 +24,14 @@ class VerticalSplitter(ft.Row):
             on_hover=self.show_draggable_cursor,
         )
         self.controls = [
-            self.right_content,
+            ft.Container(self.right_content),
             self.splitter,
             self.left_content,
         ]
 
     def move_vertical_splitter(self, e: ft.DragUpdateEvent):
-        if (e.delta_x > 0 and self.right_content.width < 300) or (
-            e.delta_x < 0 and self.right_content.width > 100
+        if (e.delta_x > 0 and self.right_content.width < self.max_width) or (
+            e.delta_x < 0 and self.right_content.width > self.min_width
         ):
             self.right_content.width += e.delta_x
         self.right_content.update()
@@ -50,7 +61,12 @@ def main(page: ft.Page):
     )
 
     vertical_splitter = VerticalSplitter(
-        height=400, spacing=0, right_content=c_right, left_content=c_left
+        height=400,
+        spacing=0,
+        right_content=c_right,
+        left_content=c_left,
+        min_width=50,
+        max_width=300,
     )
 
     page.add(vertical_splitter)
