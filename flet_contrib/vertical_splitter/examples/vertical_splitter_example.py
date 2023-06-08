@@ -19,10 +19,7 @@ def main(page: ft.Page):
         expand=True,
         right_pane=c_right,
         left_pane=c_left,
-        fixed_pane=FixedPane.LEFT,
-        fixed_pane_min_width=50,
-        fixed_pane_max_width=300,
-        fixed_pane_width=100,
+        fixed_pane=FixedPane.RIGHT,
     )
 
     page.add(vertical_splitter)

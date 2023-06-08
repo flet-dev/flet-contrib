@@ -56,18 +56,22 @@ class VerticalSplitter(ft.Row):
     def move_vertical_splitter(self, e: ft.DragUpdateEvent):
         if self.fixed_pane == FixedPane.LEFT:
             if (
-                e.delta_x > 0 and self.left_container.width < self.fixed_pane_max_width
+                e.delta_x > 0
+                and self.left_container.width + e.delta_x < self.fixed_pane_max_width
             ) or (
-                e.delta_x < 0 and self.left_container.width > self.fixed_pane_min_width
+                e.delta_x < 0
+                and self.left_container.width + e.delta_x > self.fixed_pane_min_width
             ):
                 self.left_container.width += e.delta_x
             self.left_container.update()
 
         if self.fixed_pane == FixedPane.RIGHT:
             if (
-                e.delta_x > 0 and self.right_container.width > self.fixed_pane_min_width
+                e.delta_x > 0
+                and self.right_container.width - e.delta_x > self.fixed_pane_min_width
             ) or (
-                e.delta_x < 0 and self.right_container.width < self.fixed_pane_max_width
+                e.delta_x < 0
+                and self.right_container.width - e.delta_x < self.fixed_pane_max_width
             ):
                 self.right_container.width -= e.delta_x
             self.right_container.update()
