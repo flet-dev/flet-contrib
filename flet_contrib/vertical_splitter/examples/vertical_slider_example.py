@@ -1,6 +1,6 @@
 import flet as ft
 
-from flet_contrib.vertical_splitter import VerticalSplitter
+from flet_contrib.vertical_splitter import VerticalSplitter, FixedPane
 
 
 def main(page: ft.Page):
@@ -19,7 +19,7 @@ def main(page: ft.Page):
         expand=True,
         right_pane=c_right,
         left_pane=c_left,
-        fixed_pane="right",
+        fixed_pane=FixedPane.LEFT,
         fixed_pane_min_width=50,
         fixed_pane_max_width=300,
         fixed_pane_width=100,

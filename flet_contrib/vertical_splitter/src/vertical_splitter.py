@@ -1,16 +1,23 @@
+from enum import Enum
+from typing import Optional
 import flet as ft
+
+
+class FixedPane(Enum):
+    RIGHT = "right"
+    LEFT = "left"
 
 
 class VerticalSplitter(ft.Row):
     def __init__(
         self,
-        right_pane,
-        left_pane,
+        right_pane: Optional[ft.Control],
+        left_pane: Optional[ft.Control],
         spacing=0,
         fixed_pane_min_width=50,
         fixed_pane_max_width=300,
         fixed_pane_width=100,
-        fixed_pane="left",
+        fixed_pane: FixedPane = FixedPane.LEFT,
         width=None,
         height=400,
         expand=False,
@@ -31,14 +38,15 @@ class VerticalSplitter(ft.Row):
     def generate_layout(self, left_pane, right_pane):
         self.left_container = ft.Container(content=left_pane)
         self.right_container = ft.Container(content=right_pane)
-        if self.fixed_pane == "left":
+        if self.fixed_pane == FixedPane.LEFT:
             self.left_container.width = self.fixed_pane_width
             self.right_container.expand = 1
 
-        elif self.fixed_pane == "right":
+        elif self.fixed_pane == FixedPane.RIGHT:
             self.right_container.width = self.fixed_pane_width
             self.left_container.expand = 1
 
+        print(self.fixed_pane)
         self.controls = [
             self.left_container,
             self.splitter,
@@ -46,7 +54,7 @@ class VerticalSplitter(ft.Row):
         ]
 
     def move_vertical_splitter(self, e: ft.DragUpdateEvent):
-        if self.fixed_pane == "left":
+        if self.fixed_pane == FixedPane.LEFT:
             if (
                 e.delta_x > 0 and self.left_container.width < self.fixed_pane_max_width
             ) or (
@@ -55,7 +63,7 @@ class VerticalSplitter(ft.Row):
                 self.left_container.width += e.delta_x
             self.left_container.update()
 
-        if self.fixed_pane == "right":
+        if self.fixed_pane == FixedPane.RIGHT:
             if (
                 e.delta_x > 0 and self.right_container.width > self.fixed_pane_min_width
             ) or (
