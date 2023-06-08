@@ -46,7 +46,6 @@ class VerticalSplitter(ft.Row):
             self.right_container.width = self.fixed_pane_width
             self.left_container.expand = 1
 
-        print(self.fixed_pane)
         self.controls = [
             self.left_container,
             self.splitter,
@@ -55,12 +54,17 @@ class VerticalSplitter(ft.Row):
 
     def move_vertical_splitter(self, e: ft.DragUpdateEvent):
         if self.fixed_pane == FixedPane.LEFT:
-            if (
-                e.delta_x > 0
-                and self.left_container.width + e.delta_x < self.fixed_pane_max_width
-            ) or (
-                e.delta_x < 0
-                and self.left_container.width + e.delta_x > self.fixed_pane_min_width
+            if e.control.mouse_cursor == ft.MouseCursor.RESIZE_LEFT_RIGHT and (
+                (
+                    e.delta_x > 0
+                    and self.left_container.width + e.delta_x
+                    < self.fixed_pane_max_width
+                )
+                or (
+                    e.delta_x < 0
+                    and self.left_container.width + e.delta_x
+                    > self.fixed_pane_min_width
+                )
             ):
                 self.left_container.width += e.delta_x
             self.left_container.update()
