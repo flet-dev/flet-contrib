@@ -22,8 +22,8 @@
 
 ### `right_pane`
 
-### `fixed_content`: "left" (default), "right" 
+### `fixed_pane`: "left" (default), "right" 
 
-### `min_width`
+### `fixed_pane_min_width`
 
-### `max_width`
+### `fixed_pane_max_width`
