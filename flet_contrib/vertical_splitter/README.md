@@ -53,9 +53,9 @@ A child Control contained by the right pane of the vertical splitter.
 Configures which pane will have a `fixed_pane_width`, `fixed_pane_minumum_width` and `fixed_pane_maximum_width` properties, while the other pane will have `expand` property set to `True` and will take up the remainer of the VerticalSpliitter width. The value must be an instance of the `FixedPane` class:
 
 ```
-vertical_splitter.fixed_pane = ft.FixedPane.RIGHT
+vertical_splitter.fixed_pane = FixedPane.RIGHT
 ```
-The default value is `ft.FixedPane.LEFT`.
+The default value is `FixedPane.LEFT`.
 
 ### `fixed_pane_width`
 
