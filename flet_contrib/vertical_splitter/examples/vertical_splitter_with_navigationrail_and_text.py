@@ -54,6 +54,7 @@ def main(page: ft.Page):
         expand=True,
         right_pane=c_right,
         left_pane=c_left,
+        fixed_pane_min_width=70
         # fixed_pane=FixedPane.RIGHT,
     )
 

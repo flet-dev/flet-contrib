@@ -15,7 +15,7 @@ class VerticalSplitter(ft.Row):
         left_pane: Optional[ft.Control],
         spacing=0,
         fixed_pane_min_width=50,
-        fixed_pane_max_width=300,
+        fixed_pane_max_width=200,
         fixed_pane_width=100,
         fixed_pane: FixedPane = FixedPane.LEFT,
         width=None,
