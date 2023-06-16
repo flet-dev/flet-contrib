@@ -119,23 +119,28 @@ class HorizontalSlider(ft.GestureDetector):
         self.division_shapes = []
         if self.divisions == None:
             return
-        elif self.divisions > 1:
-            for i in range(1, self.divisions):
-                print(i)
-                x = (self.track.width / self.divisions) * i + self.thumb.radius
-                if x < self.selected_track.width + self.thumb.radius:
-                    color = self.division_color_on_selected
-                else:
-                    color = self.division_color_on_track
-                print(x)
-                self.division_shapes.append(
-                    cv.Circle(
-                        x=x,
-                        y=self.thumb.radius,
-                        radius=self.thickness / 4,
-                        paint=ft.Paint(color=color),
+        else:
+            # self.division_steps = []
+            # self.division_steps.append({min: self.thumb.radius})
+            if self.divisions > 1:
+                for i in range(1, self.divisions):
+                    print(i)
+                    x = (self.track.width / self.divisions) * i + self.thumb.radius
+                    if x < self.selected_track.width + self.thumb.radius:
+                        color = self.division_color_on_selected
+                    else:
+                        color = self.division_color_on_track
+                    print(x)
+                    self.division_shapes.append(
+                        cv.Circle(
+                            x=x,
+                            y=self.thumb.radius,
+                            radius=self.thickness / 4,
+                            paint=ft.Paint(color=color),
+                        )
                     )
-                )
+                    # self.division_steps.append({})
+            # self.division_steps.append({max: self.track.width + self.thumb.radius})
 
     def update_divisions(self):
         for division_shape in self.division_shapes:
@@ -145,6 +150,15 @@ class HorizontalSlider(ft.GestureDetector):
                 color = self.division_color_on_track
             division_shape.paint.color = color
 
+    def find_closest_division_shape_x(self, x):
+        for division_shape in self.division_shapes:
+            print(division_shape.x)
+
+    def get_value(self, x):
+        return (x - self.thumb.radius) * (
+            self.max - self.min
+        ) / self.track.width + self.min
+
     def change_cursor(self, e: ft.HoverEvent):
         e.control.mouse_cursor = ft.MouseCursor.CLICK
         e.control.update()
@@ -152,12 +166,22 @@ class HorizontalSlider(ft.GestureDetector):
     def change_value_on_click(self, e: ft.DragStartEvent):
         x = max(self.thumb.radius, min(e.local_x, self.track.width + self.thumb.radius))
         print(x)
-        self.value = (x - self.thumb.radius) * (
-            self.max - self.min
-        ) / self.track.width + self.min
-        print(self.value)
-        self.selected_track.width = x - self.thumb.radius
-        self.thumb.x = x
+        if self.divisions == None:
+            # self.value = (x - self.thumb.radius) * (
+            #     self.max - self.min
+            # ) / self.track.width + self.min
+            self.value = self.get_value(x)
+            print(self.value)
+            self.selected_track.width = x - self.thumb.radius
+            self.thumb.x = x
+        else:
+            print("Discreet changes")
+            discreet_x = self.find_closest_division_shape_x(x)
+            self.value = self.get_value(discreet_x)
+            print(self.value)
+            self.selected_track.width = discreet_x - self.thumb.radius
+            self.thumb.x = discreet_x
+
         self.update_divisions()
         self.page.update()
 
@@ -167,9 +191,10 @@ class HorizontalSlider(ft.GestureDetector):
             min(e.local_x + e.delta_x, self.track.width + self.thumb.radius),
         )
 
-        self.value = (x - self.thumb.radius) * (
-            self.max - self.min
-        ) / self.track.width + self.min
+        # self.value = (x - self.thumb.radius) * (
+        #     self.max - self.min
+        # ) / self.track.width + self.min
+        self.value = self.get_value(x)
 
         print(self.value)
         self.selected_track.width = x - self.thumb.radius
