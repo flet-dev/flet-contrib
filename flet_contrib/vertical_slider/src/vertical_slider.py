@@ -131,6 +131,14 @@ class HorizontalSlider(ft.GestureDetector):
         self.on_pan_start = self.change_value_on_click
         self.on_pan_update = self.change_value_on_drag
 
+    def update_divisions(self):
+        for division_shape in self.division_shapes:
+            if division_shape.x < self.selected_track.width + self.thumb.radius:
+                color = self.division_color_on_selected
+            else:
+                color = self.division_color_on_track
+            division_shape.paint.color = color
+
     def change_cursor(self, e: ft.HoverEvent):
         e.control.mouse_cursor = ft.MouseCursor.CLICK
         e.control.update()
@@ -144,6 +152,7 @@ class HorizontalSlider(ft.GestureDetector):
         print(self.value)
         self.selected_track.width = x - self.thumb.radius
         self.thumb.x = x  ## Thumb
+        self.update_divisions()
         self.page.update()
 
     def change_value_on_drag(self, e: ft.DragUpdateEvent):
@@ -159,4 +168,5 @@ class HorizontalSlider(ft.GestureDetector):
         print(self.value)
         self.selected_track.width = x - self.thumb.radius
         self.thumb.x = x
+        self.update_divisions()
         self.page.update()
