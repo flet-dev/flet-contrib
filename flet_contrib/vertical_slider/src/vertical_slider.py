@@ -66,35 +66,36 @@ class HorizontalSlider(ft.GestureDetector):
             paint=ft.Paint(color=ft.colors.GREY_900),
         ),
     ):
-        super().__init__(width=width, height=thickness)
+        super().__init__()
         self.value = value
         self.min = min
         self.max = max
         self.track = cv.Rect(
             x=0,
             y=0,
-            height=self.height,
+            height=thickness,
             border_radius=3,
             paint=ft.Paint(color=ft.colors.GREY_500),
-            width=self.width,
+            width=width,
         )
         self.selected_track = cv.Rect(
             x=0,
             y=0,
-            height=self.height,
+            height=thickness,
             border_radius=3,
             paint=ft.Paint(color=ft.colors.YELLOW),
-            width=self.value,
+            width=self.value * width / (self.max - self.min),
         )
         self.thumb = thumb
-        self.thumb.x = self.value
-        self.thumb.y = self.thumb.radius / 2 - self.height / 2
+        self.thumb.x = self.value * width / (self.max - self.min)
+        self.thumb.y = self.thumb.radius / 2 - thickness / 2
 
         self.content = ft.Container(
-            width=self.width + self.thumb.radius,
-            height=self.thumb.radius * 2,
+            width=width + self.thumb.radius * 2,
+            # height=self.thumb.radius * 2,
+            height=20,
             # padding=self.thumb.radius,
-            # bgcolor=ft.colors.BLUE,
+            bgcolor=ft.colors.BLUE,
             content=cv.Canvas(
                 shapes=[
                     self.track,
@@ -121,7 +122,7 @@ class HorizontalSlider(ft.GestureDetector):
 
     def change_value_on_drag(self, e: ft.DragUpdateEvent):
         # print(e.local_x)
-        x = max(0, min(e.local_x + e.delta_x, self.width))
+        x = max(0, min(e.local_x + e.delta_x, self.track.width))
         self.value = x * (self.max - self.min) / self.track.width
         # if e.local_x >= 0 and e.local_x <= self.track.width:
         print(self.value)
