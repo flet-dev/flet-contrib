@@ -73,6 +73,7 @@ class HorizontalSlider(ft.GestureDetector):
         self.value = value
         self.min = min
         self.max = max
+        self.thickness = thickness
         self.divisions = divisions
         self.division_color_on_track = division_color_on_track
         self.division_color_on_selected = division_color_on_selected
@@ -95,24 +96,7 @@ class HorizontalSlider(ft.GestureDetector):
             paint=ft.Paint(color=ft.colors.RED),
             width=self.value * width / (self.max - self.min) + self.thumb.radius,
         )
-
-        self.division_shapes = []
-        for i in range(1, divisions):
-            print(i)
-            x = (self.track.width / divisions) * i + self.thumb.radius
-            if x < self.selected_track.width + self.thumb.radius:
-                color = self.division_color_on_selected
-            else:
-                color = self.division_color_on_track
-            print(x)
-            self.division_shapes.append(
-                cv.Circle(
-                    x=x,
-                    y=self.thumb.radius,
-                    radius=thickness / 4,
-                    paint=ft.Paint(color=color),
-                )
-            )
+        self.generate_divisions()
 
         self.content = ft.Container(
             width=width + self.thumb.radius * 2,
@@ -130,6 +114,28 @@ class HorizontalSlider(ft.GestureDetector):
         self.on_hover = self.change_cursor
         self.on_pan_start = self.change_value_on_click
         self.on_pan_update = self.change_value_on_drag
+
+    def generate_divisions(self):
+        self.division_shapes = []
+        if self.divisions == None:
+            return
+        elif self.divisions > 1:
+            for i in range(1, self.divisions):
+                print(i)
+                x = (self.track.width / self.divisions) * i + self.thumb.radius
+                if x < self.selected_track.width + self.thumb.radius:
+                    color = self.division_color_on_selected
+                else:
+                    color = self.division_color_on_track
+                print(x)
+                self.division_shapes.append(
+                    cv.Circle(
+                        x=x,
+                        y=self.thumb.radius,
+                        radius=self.thickness / 4,
+                        paint=ft.Paint(color=color),
+                    )
+                )
 
     def update_divisions(self):
         for division_shape in self.division_shapes:
@@ -151,7 +157,7 @@ class HorizontalSlider(ft.GestureDetector):
         ) / self.track.width + self.min
         print(self.value)
         self.selected_track.width = x - self.thumb.radius
-        self.thumb.x = x  ## Thumb
+        self.thumb.x = x
         self.update_divisions()
         self.page.update()
 
