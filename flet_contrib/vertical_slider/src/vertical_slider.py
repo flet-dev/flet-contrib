@@ -70,30 +70,30 @@ class HorizontalSlider(ft.GestureDetector):
         self.value = value
         self.min = min
         self.max = max
+        self.thumb = thumb
+        self.thumb.x = self.value * width / (self.max - self.min) + self.thumb.radius
+        self.thumb.y = self.thumb.radius
         self.track = cv.Rect(
-            x=0,
-            y=0,
+            x=self.thumb.radius,
+            y=self.thumb.radius - thickness / 2,
             height=thickness,
             border_radius=3,
             paint=ft.Paint(color=ft.colors.GREY_500),
             width=width,
         )
         self.selected_track = cv.Rect(
-            x=0,
-            y=0,
+            x=self.thumb.radius,
+            y=self.thumb.radius - thickness / 2,
             height=thickness,
             border_radius=3,
             paint=ft.Paint(color=ft.colors.YELLOW),
-            width=self.value * width / (self.max - self.min),
+            width=self.value * width / (self.max - self.min) + self.thumb.radius,
         )
-        self.thumb = thumb
-        self.thumb.x = self.value * width / (self.max - self.min)
-        self.thumb.y = self.thumb.radius / 2 - thickness / 2
 
         self.content = ft.Container(
             width=width + self.thumb.radius * 2,
-            # height=self.thumb.radius * 2,
-            height=20,
+            height=self.thumb.radius * 2,
+            # height=20,
             # padding=self.thumb.radius,
             bgcolor=ft.colors.BLUE,
             content=cv.Canvas(
