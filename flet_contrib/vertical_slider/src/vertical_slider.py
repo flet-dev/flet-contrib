@@ -65,7 +65,7 @@ class HorizontalSlider(ft.GestureDetector):
             radius=20,
             paint=ft.Paint(color=ft.colors.GREY_900),
         ),
-        divisions=2,
+        divisions=10,
         division_color_on_track=ft.colors.WHITE,
         division_color_on_selected=ft.colors.BLUE,
     ):
@@ -83,7 +83,7 @@ class HorizontalSlider(ft.GestureDetector):
             x=self.thumb.radius,
             y=self.thumb.radius - thickness / 2,
             height=thickness,
-            border_radius=3,
+            border_radius=thickness / 2,
             paint=ft.Paint(color=ft.colors.GREY_500),
             width=width,
         )
@@ -91,20 +91,28 @@ class HorizontalSlider(ft.GestureDetector):
             x=self.thumb.radius,
             y=self.thumb.radius - thickness / 2,
             height=thickness,
-            border_radius=3,
+            border_radius=thickness / 2,
             paint=ft.Paint(color=ft.colors.RED),
             width=self.value * width / (self.max - self.min) + self.thumb.radius,
         )
 
         self.division_shapes = []
-        self.division_shapes.append(
-            cv.Circle(
-                x=self.track.width / 2 + self.thumb.radius,
-                y=self.thumb.radius,
-                radius=thickness / 4,
-                paint=ft.Paint(color=self.division_color_on_track),
+        for i in range(1, divisions):
+            print(i)
+            x = (self.track.width / divisions) * i + self.thumb.radius
+            if x < self.selected_track.width + self.thumb.radius:
+                color = self.division_color_on_selected
+            else:
+                color = self.division_color_on_track
+            print(x)
+            self.division_shapes.append(
+                cv.Circle(
+                    x=x,
+                    y=self.thumb.radius,
+                    radius=thickness / 4,
+                    paint=ft.Paint(color=color),
+                )
             )
-        )
 
         self.content = ft.Container(
             width=width + self.thumb.radius * 2,
