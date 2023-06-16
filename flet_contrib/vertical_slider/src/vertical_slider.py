@@ -78,26 +78,8 @@ class HorizontalSlider(ft.GestureDetector):
         self.division_color_on_track = division_color_on_track
         self.division_color_on_selected = division_color_on_selected
         self.thumb = thumb
-        self.thumb.x = self.value * width / (self.max - self.min) + self.thumb.radius
-        self.thumb.y = self.thumb.radius
-        self.track = cv.Rect(
-            x=self.thumb.radius,
-            y=self.thumb.radius - thickness / 2,
-            height=thickness,
-            border_radius=thickness / 2,
-            paint=ft.Paint(color=ft.colors.GREY_500),
-            width=width,
-        )
-        self.selected_track = cv.Rect(
-            x=self.thumb.radius,
-            y=self.thumb.radius - thickness / 2,
-            height=thickness,
-            border_radius=thickness / 2,
-            paint=ft.Paint(color=ft.colors.RED),
-            width=self.value * width / (self.max - self.min) + self.thumb.radius,
-        )
-        self.generate_divisions()
-        shapes = [self.track, self.selected_track] + self.division_shapes + [self.thumb]
+
+        shapes = self.generate_shapes(width)
 
         self.content = ft.Container(
             width=width + self.thumb.radius * 2,
@@ -108,6 +90,29 @@ class HorizontalSlider(ft.GestureDetector):
         self.on_hover = self.change_cursor
         self.on_pan_start = self.change_value_on_click
         self.on_pan_update = self.change_value_on_drag
+
+    def generate_shapes(self, width):
+        self.thumb.x = self.value * width / (self.max - self.min) + self.thumb.radius
+        self.thumb.y = self.thumb.radius
+        self.track = cv.Rect(
+            x=self.thumb.radius,
+            y=self.thumb.radius - self.thickness / 2,
+            height=self.thickness,
+            border_radius=self.thickness / 2,
+            paint=ft.Paint(color=ft.colors.GREY_500),
+            width=width,
+        )
+        self.selected_track = cv.Rect(
+            x=self.thumb.radius,
+            y=self.thumb.radius - self.thickness / 2,
+            height=self.thickness,
+            border_radius=self.thickness / 2,
+            paint=ft.Paint(color=ft.colors.RED),
+            width=self.value * width / (self.max - self.min) + self.thumb.radius,
+        )
+        self.generate_divisions()
+        shapes = [self.track, self.selected_track] + self.division_shapes + [self.thumb]
+        return shapes
 
     def generate_divisions(self):
         self.division_shapes = []
