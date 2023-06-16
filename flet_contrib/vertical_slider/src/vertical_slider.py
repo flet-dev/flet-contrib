@@ -120,8 +120,6 @@ class HorizontalSlider(ft.GestureDetector):
         if self.divisions == None:
             return
         else:
-            # self.division_steps = []
-            # self.division_steps.append({min: self.thumb.radius})
             if self.divisions > 1:
                 for i in range(1, self.divisions):
                     print(i)
@@ -139,8 +137,6 @@ class HorizontalSlider(ft.GestureDetector):
                             paint=ft.Paint(color=color),
                         )
                     )
-                    # self.division_steps.append({})
-            # self.division_steps.append({max: self.track.width + self.thumb.radius})
 
     def update_divisions(self):
         for division_shape in self.division_shapes:
@@ -176,18 +172,13 @@ class HorizontalSlider(ft.GestureDetector):
         x = max(self.thumb.radius, min(e.local_x, self.track.width + self.thumb.radius))
         print(x)
         if self.divisions == None:
-            # self.value = (x - self.thumb.radius) * (
-            #     self.max - self.min
-            # ) / self.track.width + self.min
             self.value = self.get_value(x)
             print(self.value)
             self.selected_track.width = x - self.thumb.radius
             self.thumb.x = x
         else:
-            print("Discreet changes")
             discreet_x = self.find_closest_division_shape_x(x)
             self.value = self.get_value(discreet_x)
-            print(self.value)
             self.selected_track.width = discreet_x - self.thumb.radius
             self.thumb.x = discreet_x
 
@@ -199,14 +190,14 @@ class HorizontalSlider(ft.GestureDetector):
             self.thumb.radius,
             min(e.local_x + e.delta_x, self.track.width + self.thumb.radius),
         )
-
-        # self.value = (x - self.thumb.radius) * (
-        #     self.max - self.min
-        # ) / self.track.width + self.min
-        self.value = self.get_value(x)
-
-        # print(self.value)
-        self.selected_track.width = x - self.thumb.radius
-        self.thumb.x = x
+        if self.divisions == None:
+            self.value = self.get_value(x)
+            self.selected_track.width = x - self.thumb.radius
+            self.thumb.x = x
+        else:
+            discreet_x = self.find_closest_division_shape_x(x)
+            self.value = self.get_value(discreet_x)
+            self.selected_track.width = discreet_x - self.thumb.radius
+            self.thumb.x = discreet_x
         self.update_divisions()
         self.page.update()
