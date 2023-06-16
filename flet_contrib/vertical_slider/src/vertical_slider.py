@@ -151,8 +151,17 @@ class HorizontalSlider(ft.GestureDetector):
             division_shape.paint.color = color
 
     def find_closest_division_shape_x(self, x):
+        previous_x = self.thumb.radius
         for division_shape in self.division_shapes:
-            print(division_shape.x)
+            if x > division_shape.x:
+                previous_x = division_shape.x
+            else:
+                if x - previous_x < division_shape.x - x:
+                    return previous_x
+                else:
+                    return division_shape.x
+
+        return self.track.width + self.thumb.radius
 
     def get_value(self, x):
         return (x - self.thumb.radius) * (
@@ -196,7 +205,7 @@ class HorizontalSlider(ft.GestureDetector):
         # ) / self.track.width + self.min
         self.value = self.get_value(x)
 
-        print(self.value)
+        # print(self.value)
         self.selected_track.width = x - self.thumb.radius
         self.thumb.x = x
         self.update_divisions()
