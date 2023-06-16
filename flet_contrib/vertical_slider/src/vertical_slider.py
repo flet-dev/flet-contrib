@@ -56,7 +56,7 @@ class VerticalSlider(ft.GestureDetector):
 class HorizontalSlider(ft.GestureDetector):
     def __init__(
         self,
-        width=100,
+        width=200,
         thickness=5,
         value=50,
         min=0,
@@ -68,6 +68,8 @@ class HorizontalSlider(ft.GestureDetector):
     ):
         super().__init__(width=width, height=thickness)
         self.value = value
+        self.min = min
+        self.max = max
         self.track = cv.Rect(
             x=0,
             y=0,
@@ -113,15 +115,16 @@ class HorizontalSlider(ft.GestureDetector):
     def change_value_on_click(self, e: ft.DragStartEvent):
         # print(e.local_x)
         if e.local_x >= 0 and e.local_x <= self.content.width:
-            self.content.content.shapes[1].width = e.local_x  ## New volume
+            self.selected_track.width = e.local_x  ## New volume
             self.thumb.x = e.local_x  ## Thumb
             self.page.update()
 
     def change_value_on_drag(self, e: ft.DragUpdateEvent):
         # print(e.local_x)
-        self.value = max(0, min(e.local_x + e.delta_x, self.width))
-        if e.local_x >= 0 and e.local_x <= self.content.width:
-            print(self.value)
-            self.selected_track.width = self.value
-            self.thumb.x = self.value
-            self.page.update()
+        x = max(0, min(e.local_x + e.delta_x, self.width))
+        self.value = x * (self.max - self.min) / self.track.width
+        # if e.local_x >= 0 and e.local_x <= self.track.width:
+        print(self.value)
+        self.selected_track.width = x
+        self.thumb.x = x
+        self.page.update()

@@ -19,7 +19,10 @@ def main(page: ft.Page):
         on_change=slider_changed,
     )
 
-    page.add(horizonal_slider, default_slider)
+    page.add(
+        ft.Row([horizonal_slider], alignment=ft.MainAxisAlignment.CENTER),
+        default_slider,
+    )
 
 
 ft.app(target=main)
