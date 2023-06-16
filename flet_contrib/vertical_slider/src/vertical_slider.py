@@ -58,9 +58,9 @@ class HorizontalSlider(ft.GestureDetector):
         self,
         width=200,
         thickness=10,
-        value=50,
-        min=0,
-        max=100,
+        value=200,
+        min=100,
+        max=500,
         thumb=cv.Circle(
             radius=20,
             paint=ft.Paint(color=ft.colors.GREY_900),
@@ -93,13 +93,10 @@ class HorizontalSlider(ft.GestureDetector):
         self.content = ft.Container(
             width=width + self.thumb.radius * 2,
             height=self.thumb.radius * 2,
-            # height=20,
-            # padding=self.thumb.radius,
             bgcolor=ft.colors.BLUE,
             content=cv.Canvas(
                 shapes=[
                     self.track,
-                    # self.thumb,
                     self.selected_track,
                     self.thumb,
                 ]
@@ -114,29 +111,26 @@ class HorizontalSlider(ft.GestureDetector):
         e.control.update()
 
     def change_value_on_click(self, e: ft.DragStartEvent):
-        # print(e.local_x)
         x = max(self.thumb.radius, min(e.local_x, self.track.width + self.thumb.radius))
         print(x)
-        self.value = (x - self.thumb.radius) * (self.max - self.min) / self.track.width
+        self.value = (x - self.thumb.radius) * (
+            self.max - self.min
+        ) / self.track.width + self.min
         print(self.value)
-        # if (
-        #     e.local_x >= self.thumb.radius
-        #     and e.local_x <= self.track.width + self.thumb.radius
-        # ):
-        self.selected_track.width = x - self.thumb.radius  ## New volume
+        self.selected_track.width = x - self.thumb.radius
         self.thumb.x = x  ## Thumb
         self.page.update()
 
     def change_value_on_drag(self, e: ft.DragUpdateEvent):
-        # print(e.local_x)
         x = max(
             self.thumb.radius,
             min(e.local_x + e.delta_x, self.track.width + self.thumb.radius),
         )
-        # x = max(0, min(e.local_x + e.delta_x, self.track.width))
-        # self.value = x * (self.max - self.min) / self.track.width
-        self.value = (x - self.thumb.radius) * (self.max - self.min) / self.track.width
-        # if e.local_x >= 0 and e.local_x <= self.track.width:
+
+        self.value = (x - self.thumb.radius) * (
+            self.max - self.min
+        ) / self.track.width + self.min
+
         print(self.value)
         self.selected_track.width = x - self.thumb.radius
         self.thumb.x = x
