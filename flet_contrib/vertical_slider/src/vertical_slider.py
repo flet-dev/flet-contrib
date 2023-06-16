@@ -54,7 +54,18 @@ class VerticalSlider(ft.GestureDetector):
 
 
 class HorizontalSlider(ft.GestureDetector):
-    def __init__(self, width=100, thickness=5, value=50, min=0, max=100):
+    def __init__(
+        self,
+        width=100,
+        thickness=5,
+        value=50,
+        min=0,
+        max=100,
+        thumb=cv.Circle(
+            radius=10,
+            paint=ft.Paint(color=ft.colors.GREY_900),
+        ),
+    ):
         super().__init__(width=width, height=thickness)
         self.value = value
         self.track = cv.Rect(
@@ -73,15 +84,14 @@ class HorizontalSlider(ft.GestureDetector):
             paint=ft.Paint(color=ft.colors.YELLOW),
             width=self.value,
         )
-        self.thumb = cv.Circle(
-            x=self.value,
-            y=3,
-            radius=6,
-            paint=ft.Paint(color=ft.colors.GREY_900),
-        )
+        self.thumb = thumb
+        self.thumb.x = self.value
+        self.thumb.y = self.thumb.radius / 2 - self.height / 2
+
         self.content = ft.Container(
-            width=100,
-            height=5,
+            width=self.width + self.thumb.radius,
+            height=self.thumb.radius * 2,
+            # padding=self.thumb.radius,
             # bgcolor=ft.colors.BLUE,
             content=cv.Canvas(
                 shapes=[

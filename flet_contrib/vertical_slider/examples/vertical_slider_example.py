@@ -14,7 +14,7 @@ def main(page: ft.Page):
         max=100,
         value=50,
         width=200,
-        # divisions=10,
+        divisions=10,
         label="{value}",
         on_change=slider_changed,
     )
