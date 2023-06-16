@@ -97,19 +97,13 @@ class HorizontalSlider(ft.GestureDetector):
             width=self.value * width / (self.max - self.min) + self.thumb.radius,
         )
         self.generate_divisions()
+        shapes = [self.track, self.selected_track] + self.division_shapes + [self.thumb]
 
         self.content = ft.Container(
             width=width + self.thumb.radius * 2,
             height=self.thumb.radius * 2,
             bgcolor=ft.colors.GREEN_100,
-            content=cv.Canvas(
-                shapes=[
-                    self.track,
-                    self.selected_track,
-                ]
-                + self.division_shapes
-                + [self.thumb]
-            ),
+            content=cv.Canvas(shapes=shapes),
         )
         self.on_hover = self.change_cursor
         self.on_pan_start = self.change_value_on_click
