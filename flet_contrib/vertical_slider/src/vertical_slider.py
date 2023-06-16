@@ -129,10 +129,15 @@ class HorizontalSlider(ft.GestureDetector):
 
     def change_value_on_drag(self, e: ft.DragUpdateEvent):
         # print(e.local_x)
-        x = max(0, min(e.local_x + e.delta_x, self.track.width))
-        self.value = x * (self.max - self.min) / self.track.width
+        x = max(
+            self.thumb.radius,
+            min(e.local_x + e.delta_x, self.track.width + self.thumb.radius),
+        )
+        # x = max(0, min(e.local_x + e.delta_x, self.track.width))
+        # self.value = x * (self.max - self.min) / self.track.width
+        self.value = (x - self.thumb.radius) * (self.max - self.min) / self.track.width
         # if e.local_x >= 0 and e.local_x <= self.track.width:
         print(self.value)
-        self.selected_track.width = x
+        self.selected_track.width = x - self.thumb.radius
         self.thumb.x = x
         self.page.update()
