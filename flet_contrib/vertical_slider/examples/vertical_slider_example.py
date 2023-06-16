@@ -4,10 +4,22 @@ from flet_contrib.vertical_slider import VerticalSlider, HorizontalSlider
 
 
 def main(page: ft.Page):
-    horizonal_slider = HorizontalSlider()
-    vertical_slider = VerticalSlider()
+    def slider_changed(e):
+        print(e.control.value)
 
-    page.add(vertical_slider, horizonal_slider)
+    horizonal_slider = HorizontalSlider()
+    # vertical_slider = VerticalSlider()
+    default_slider = ft.Slider(
+        min=0,
+        max=100,
+        value=50,
+        width=200,
+        # divisions=10,
+        label="{value}",
+        on_change=slider_changed,
+    )
+
+    page.add(horizonal_slider, default_slider)
 
 
 ft.app(target=main)
