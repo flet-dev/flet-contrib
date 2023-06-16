@@ -59,6 +59,7 @@ class HorizontalSlider(ft.GestureDetector):
         width=200,
         thickness=10,
         value=200,
+        divisions=2,
         min=100,
         max=500,
         thumb=cv.Circle(
@@ -70,6 +71,7 @@ class HorizontalSlider(ft.GestureDetector):
         self.value = value
         self.min = min
         self.max = max
+        self.divisions = divisions
         self.thumb = thumb
         self.thumb.x = self.value * width / (self.max - self.min) + self.thumb.radius
         self.thumb.y = self.thumb.radius
@@ -86,20 +88,32 @@ class HorizontalSlider(ft.GestureDetector):
             y=self.thumb.radius - thickness / 2,
             height=thickness,
             border_radius=3,
-            paint=ft.Paint(color=ft.colors.YELLOW),
+            paint=ft.Paint(color=ft.colors.RED),
             width=self.value * width / (self.max - self.min) + self.thumb.radius,
+        )
+
+        self.division_shapes = []
+        self.division_shapes.append(
+            cv.Oval(
+                x=self.track.width / 2 + self.thumb.radius,
+                y=self.thumb.radius - thickness / 2,
+                width=2,
+                height=thickness,
+                paint=ft.Paint(color=ft.colors.GREEN),
+            )
         )
 
         self.content = ft.Container(
             width=width + self.thumb.radius * 2,
             height=self.thumb.radius * 2,
-            bgcolor=ft.colors.BLUE,
+            bgcolor=ft.colors.GREEN_100,
             content=cv.Canvas(
                 shapes=[
                     self.track,
                     self.selected_track,
-                    self.thumb,
                 ]
+                + self.division_shapes
+                + [self.thumb]
             ),
         )
         self.on_hover = self.change_cursor
