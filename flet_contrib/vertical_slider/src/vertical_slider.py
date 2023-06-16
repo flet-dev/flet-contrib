@@ -59,19 +59,23 @@ class HorizontalSlider(ft.GestureDetector):
         width=200,
         thickness=10,
         value=200,
-        divisions=2,
         min=100,
         max=500,
         thumb=cv.Circle(
             radius=20,
             paint=ft.Paint(color=ft.colors.GREY_900),
         ),
+        divisions=2,
+        division_color_on_track=ft.colors.WHITE,
+        division_color_on_selected=ft.colors.BLUE,
     ):
         super().__init__()
         self.value = value
         self.min = min
         self.max = max
         self.divisions = divisions
+        self.division_color_on_track = division_color_on_track
+        self.division_color_on_selected = division_color_on_selected
         self.thumb = thumb
         self.thumb.x = self.value * width / (self.max - self.min) + self.thumb.radius
         self.thumb.y = self.thumb.radius
@@ -94,12 +98,11 @@ class HorizontalSlider(ft.GestureDetector):
 
         self.division_shapes = []
         self.division_shapes.append(
-            cv.Oval(
+            cv.Circle(
                 x=self.track.width / 2 + self.thumb.radius,
-                y=self.thumb.radius - thickness / 2,
-                width=2,
-                height=thickness,
-                paint=ft.Paint(color=ft.colors.GREEN),
+                y=self.thumb.radius,
+                radius=thickness / 4,
+                paint=ft.Paint(color=self.division_color_on_track),
             )
         )
 
