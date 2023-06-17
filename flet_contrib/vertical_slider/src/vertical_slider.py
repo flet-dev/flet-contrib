@@ -16,7 +16,7 @@ class VerticalSlider(ft.GestureDetector):
             radius=20,
             paint=ft.Paint(color=ft.colors.GREY_900),
         ),
-        divisions=10,
+        divisions=None,
         division_color_on_track=ft.colors.WHITE,
         division_color_on_selected=ft.colors.BLUE,
     ):
