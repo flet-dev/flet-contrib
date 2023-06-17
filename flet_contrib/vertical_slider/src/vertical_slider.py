@@ -10,13 +10,13 @@ class VerticalSlider(ft.GestureDetector):
         length=200,
         thickness=10,
         value=200,
-        min=200,
-        max=800,
+        min=100,
+        max=900,
         thumb=cv.Circle(
             radius=20,
             paint=ft.Paint(color=ft.colors.PRIMARY),
         ),
-        divisions=4,
+        divisions=8,
         track_color=ft.colors.OUTLINE_VARIANT,
         selected_track_color=ft.colors.PRIMARY,
         division_color_on_track=ft.colors.RED,
@@ -114,9 +114,9 @@ class VerticalSlider(ft.GestureDetector):
                 division_shape.y
                 < self.track.height - self.selected_track.height + self.thumb.radius
             ):
-                color = self.division_color_on_selected
-            else:
                 color = self.division_color_on_track
+            else:
+                color = self.division_color_on_selected
             division_shape.paint.color = color
 
     def find_closest_division_shape_y(self, y):
