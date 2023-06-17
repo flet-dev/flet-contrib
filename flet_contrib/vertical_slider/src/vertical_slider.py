@@ -72,9 +72,7 @@ class VerticalSlider(ft.GestureDetector):
                 height=self.track.height + self.thumb.radius - self.thumb.y,
             )
         else:
-            self.thumb.x = (
-                self.value * self.length / (self.max - self.min) + self.thumb.radius
-            )
+            self.thumb.x = self.get_position(self.value)
             self.thumb.y = self.thumb.radius
             self.track = cv.Rect(
                 x=self.thumb.radius,
@@ -122,6 +120,21 @@ class VerticalSlider(ft.GestureDetector):
                                 paint=ft.Paint(color=color),
                             )
                         )
+                    else:
+                        x = (self.track.width / self.divisions) * i + self.thumb.radius
+                        if x < self.selected_track.width + self.thumb.radius:
+                            color = self.division_color_on_selected
+                        else:
+                            color = self.division_color_on_track
+                        print(x)
+                        self.division_shapes.append(
+                            cv.Circle(
+                                x=x,
+                                y=self.thumb.radius,
+                                radius=self.thickness / 4,
+                                paint=ft.Paint(color=color),
+                            )
+                        )
 
     def update_divisions(self):
         for division_shape in self.division_shapes:
@@ -133,6 +146,11 @@ class VerticalSlider(ft.GestureDetector):
                     color = self.division_color_on_track
                 else:
                     color = self.division_color_on_selected
+            else:
+                if division_shape.x < self.selected_track.width + self.thumb.radius:
+                    color = self.division_color_on_selected
+                else:
+                    color = self.division_color_on_track
             division_shape.paint.color = color
 
     def find_closest_division_shape_position(self, position):
@@ -161,9 +179,12 @@ class VerticalSlider(ft.GestureDetector):
             )
 
     def get_position(self, value):
-        return self.thumb.radius + ((self.max - value) * self.length) / (
-            self.max - self.min
-        )
+        if self.vertical:
+            return self.thumb.radius + ((self.max - value) * self.length) / (
+                self.max - self.min
+            )
+        else:
+            return value * self.length / (self.max - self.min) + self.thumb.radius
 
     def change_cursor(self, e: ft.HoverEvent):
         e.control.mouse_cursor = ft.MouseCursor.CLICK
