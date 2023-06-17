@@ -13,10 +13,8 @@ class VerticalSlider(ft.GestureDetector):
         value=200,
         min=100,
         max=900,
-        # thumb=cv.Circle(
-        #     radius=10,
-        #     paint=ft.Paint(color=ft.colors.PRIMARY),
-        # ),
+        thumb_radius=10,
+        thumb_color=ft.colors.PRIMARY,
         divisions=None,
         track_color=ft.colors.OUTLINE_VARIANT,
         selected_track_color=ft.colors.PRIMARY,
@@ -30,12 +28,13 @@ class VerticalSlider(ft.GestureDetector):
         self.max = max
         self.thickness = thickness
         self.length = length
+        self.thumb_radius = thumb_radius
+        self.thumb_color = thumb_color
         self.divisions = divisions
         self.track_color = track_color
         self.selected_track_color = selected_track_color
         self.division_color_on_track = division_color_on_track
         self.division_color_on_selected = division_color_on_selected
-        # self.thumb = thumb
         self.content = self.generate_slider()
         self.on_hover = self.change_cursor
         self.on_pan_start = self.change_value_on_click
@@ -54,8 +53,8 @@ class VerticalSlider(ft.GestureDetector):
 
     def generate_shapes(self):
         self.thumb = cv.Circle(
-            radius=10,
-            paint=ft.Paint(color=ft.colors.PRIMARY),
+            radius=self.thumb_radius,
+            paint=ft.Paint(color=self.thumb_color),
         )
 
         if self.vertical:
@@ -253,7 +252,8 @@ class VerticalSlider(ft.GestureDetector):
                 self.update_thumb_position(discrete_x)
 
         self.update_divisions()
-        self.page.update()
+        # self.page.update()
+        self.update()
 
     def change_value_on_drag(self, e: ft.DragUpdateEvent):
         if self.vertical:
@@ -278,7 +278,8 @@ class VerticalSlider(ft.GestureDetector):
                 discrete_x = self.find_closest_division_shape_position(x)
                 self.update_thumb_position(discrete_x)
         self.update_divisions()
-        self.page.update()
+        # self.page.update()
+        self.update()
 
 
 class HorizontalSlider(ft.GestureDetector):
