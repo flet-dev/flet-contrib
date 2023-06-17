@@ -161,7 +161,7 @@ class VerticalSlider(ft.GestureDetector):
 
     def find_closest_division_shape_position(self, position):
         if self.vertical:
-            previous_y = self.thumb.radius + self.track.height
+            previous_y = self.thumb_radius + self.length
             for division_shape in self.division_shapes:
                 if position < division_shape.y:
                     previous_y = division_shape.y
@@ -214,7 +214,7 @@ class VerticalSlider(ft.GestureDetector):
         e.control.mouse_cursor = ft.MouseCursor.CLICK
         e.control.update()
 
-    def update_thumb_position(self, position):
+    def move_thumb(self, position):
         self.value = self.get_value(position)
         print(f"Value: {self.value}")
         if self.vertical:
@@ -227,50 +227,39 @@ class VerticalSlider(ft.GestureDetector):
             self.selected_track.width = position - self.thumb_radius
             self.thumb.x = position
 
+    def update_slider(self, position):
+        if self.divisions == None:
+            self.move_thumb(position)
+        else:
+            discrete_position = self.find_closest_division_shape_position(position)
+            self.move_thumb(discrete_position)
+        self.update_divisions()
+        self.update()
+
     def change_value_on_click(self, e: ft.DragStartEvent):
         if self.vertical:
-            y = max(self.thumb_radius, min(e.local_y, self.length + self.thumb_radius))
-            if self.divisions == None:
-                self.update_thumb_position(y)
-            else:
-                discrete_y = self.find_closest_division_shape_position(y)
-                self.update_thumb_position(discrete_y)
+            position = max(
+                self.thumb_radius, min(e.local_y, self.length + self.thumb_radius)
+            )
         else:
-            x = max(self.thumb_radius, min(e.local_x, self.length + self.thumb_radius))
-            if self.divisions == None:
-                self.update_thumb_position(x)
-            else:
-                discrete_x = self.find_closest_division_shape_position(x)
-                self.update_thumb_position(discrete_x)
-
-        self.update_divisions()
-        # self.page.update()
+            position = max(
+                self.thumb_radius, min(e.local_x, self.length + self.thumb_radius)
+            )
+        self.update_slider(position)
         self.update()
 
     def change_value_on_drag(self, e: ft.DragUpdateEvent):
         if self.vertical:
-            y = max(
+            position = max(
                 self.thumb_radius,
                 min(e.local_y + e.delta_y, self.length + self.thumb_radius),
             )
-            if self.divisions == None:
-                self.update_thumb_position(y)
-            else:
-                discrete_y = self.find_closest_division_shape_position(y)
-                self.update_thumb_position(discrete_y)
         else:
-            x = max(
+            position = max(
                 self.thumb_radius,
                 min(e.local_x + e.delta_x, self.length + self.thumb_radius),
             )
-            if self.divisions == None:
-                self.update_thumb_position(x)
-
-            else:
-                discrete_x = self.find_closest_division_shape_position(x)
-                self.update_thumb_position(discrete_x)
-        self.update_divisions()
-        # self.page.update()
+        self.update_slider(position)
         self.update()
 
 
