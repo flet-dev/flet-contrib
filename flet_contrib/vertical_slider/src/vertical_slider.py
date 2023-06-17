@@ -8,18 +8,18 @@ class VerticalSlider(ft.GestureDetector):
     def __init__(
         self,
         length=200,
-        thickness=10,
+        thickness=5,
         value=200,
         min=100,
         max=900,
         thumb=cv.Circle(
-            radius=20,
+            radius=10,
             paint=ft.Paint(color=ft.colors.PRIMARY),
         ),
-        divisions=8,
+        divisions=None,
         track_color=ft.colors.OUTLINE_VARIANT,
         selected_track_color=ft.colors.PRIMARY,
-        division_color_on_track=ft.colors.RED,
+        division_color_on_track=ft.colors.PRIMARY_CONTAINER,
         division_color_on_selected=ft.colors.OUTLINE,
     ):
         super().__init__()
@@ -34,10 +34,18 @@ class VerticalSlider(ft.GestureDetector):
         self.division_color_on_track = division_color_on_track
         self.division_color_on_selected = division_color_on_selected
         self.thumb = thumb
-        self.content = self.generate_container()
+        self.content = self.generate_slider()
         self.on_hover = self.change_cursor
         self.on_pan_start = self.change_value_on_click
         self.on_pan_update = self.change_value_on_drag
+
+    def generate_slider(self):
+        return ft.Container(
+            height=self.length + self.thumb.radius * 2,
+            width=self.thumb.radius * 2,
+            # bgcolor=ft.colors.GREEN_100,
+            content=cv.Canvas(shapes=self.generate_shapes()),
+        )
 
     def generate_shapes(self):
         self.thumb.x = self.thumb.radius
@@ -91,14 +99,6 @@ class VerticalSlider(ft.GestureDetector):
                             paint=ft.Paint(color=color),
                         )
                     )
-
-    def generate_container(self):
-        return ft.Container(
-            height=self.length + self.thumb.radius * 2,
-            width=self.thumb.radius * 2,
-            bgcolor=ft.colors.GREEN_100,
-            content=cv.Canvas(shapes=self.generate_shapes()),
-        )
 
     def update_divisions(self):
         for division_shape in self.division_shapes:
