@@ -71,7 +71,7 @@ class VerticalSlider(ft.GestureDetector):
             )
             self.selected_track = cv.Rect(
                 x=self.thumb.radius - self.thickness / 2,
-                y=self.thumb.radius,
+                y=self.thumb.y,
                 width=self.thickness,
                 border_radius=self.thickness / 2,
                 paint=ft.Paint(color=self.selected_track_color),
