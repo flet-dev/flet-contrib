@@ -72,7 +72,6 @@ class VerticalSlider(ft.GestureDetector):
         else:
             if self.divisions > 1:
                 for i in range(1, self.divisions):
-                    print(i)
                     y = (
                         self.track.height
                         + self.thumb.radius
@@ -87,7 +86,6 @@ class VerticalSlider(ft.GestureDetector):
                         color = self.division_color_on_track
                     else:
                         color = self.division_color_on_selected
-                    print(y)
                     self.division_shapes.append(
                         cv.Circle(
                             y=y,
@@ -107,22 +105,25 @@ class VerticalSlider(ft.GestureDetector):
 
     def update_divisions(self):
         for division_shape in self.division_shapes:
-            if division_shape.x < self.selected_track.width + self.thumb.radius:
+            if (
+                division_shape.y
+                < self.track.height - self.selected_track.height + self.thumb.radius
+            ):
                 color = self.division_color_on_selected
             else:
                 color = self.division_color_on_track
             division_shape.paint.color = color
 
-    def find_closest_division_shape_x(self, x):
-        previous_x = self.thumb.radius
+    def find_closest_division_shape_y(self, y):
+        previous_y = self.thumb.radius + self.track.height
         for division_shape in self.division_shapes:
-            if x > division_shape.x:
-                previous_x = division_shape.x
+            if y < division_shape.y:
+                previous_y = division_shape.y
             else:
-                if x - previous_x < division_shape.x - x:
-                    return previous_x
+                if abs(previous_y - y) < abs(division_shape.y - y):
+                    return previous_y
                 else:
-                    return division_shape.x
+                    return division_shape.y
 
         return self.track.width + self.thumb.radius
 
@@ -150,10 +151,12 @@ class VerticalSlider(ft.GestureDetector):
         if self.divisions == None:
             self.update_thumb_position(y)
         else:
-            discreet_x = self.find_closest_division_shape_x(y)
-            self.value = self.get_value(discreet_x)
-            self.selected_track.width = discreet_x - self.thumb.radius
-            self.thumb.y = discreet_x
+            # discreet_x = self.find_closest_division_shape_x(y)
+            # self.value = self.get_value(discreet_x)
+            # self.selected_track.width = discreet_x - self.thumb.radius
+            # self.thumb.y = discreet_x
+            discrete_y = self.find_closest_division_shape_y(y)
+            self.update_thumb_position(discrete_y)
 
         self.update_divisions()
         self.page.update()
@@ -166,10 +169,11 @@ class VerticalSlider(ft.GestureDetector):
         if self.divisions == None:
             self.update_thumb_position(y)
         else:
-            discreet_x = self.find_closest_division_shape_x(x)
-            self.value = self.get_value(discreet_x)
-            self.selected_track.width = discreet_x - self.thumb.radius
-            self.thumb.x = discreet_x
+            discrete_y = self.find_closest_division_shape_y(y)
+            self.update_thumb_position(discrete_y)
+            # self.value = self.get_value(discreet_y)
+            # self.selected_track.height = discreet_y - self.thumb.radius
+            # self.thumb.y = discreet_y
         self.update_divisions()
         self.page.update()
 
