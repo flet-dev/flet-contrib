@@ -136,17 +136,9 @@ class VerticalSlider(ft.GestureDetector):
             return previous_y
 
     def get_value(self, y):
-        return (
-            self.min
-            + self.max
-            - (
-                (y - self.thumb.radius) * (self.max - self.min) / self.track.height
-                + self.min
-            )
+        return +self.max - (
+            (y - self.thumb.radius) * (self.max - self.min) / self.track.height
         )
-        # return (self.track.height * (self.max - self.min)) / (
-        #     self.thumb.radius + self.track.height - y
-        # ) + self.min
 
     def change_cursor(self, e: ft.HoverEvent):
         e.control.mouse_cursor = ft.MouseCursor.CLICK
