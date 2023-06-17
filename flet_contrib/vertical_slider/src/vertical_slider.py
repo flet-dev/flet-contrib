@@ -9,14 +9,14 @@ class VerticalSlider(ft.GestureDetector):
         self,
         length=200,
         thickness=10,
-        value=400,
+        value=200,
         min=200,
         max=800,
         thumb=cv.Circle(
             radius=20,
             paint=ft.Paint(color=ft.colors.GREY_900),
         ),
-        divisions=None,
+        divisions=10,
         division_color_on_track=ft.colors.WHITE,
         division_color_on_selected=ft.colors.BLUE,
     ):
@@ -30,33 +30,23 @@ class VerticalSlider(ft.GestureDetector):
         self.division_color_on_track = division_color_on_track
         self.division_color_on_selected = division_color_on_selected
         self.thumb = thumb
-
-        # shapes = self.generate_shapes()
-
-        self.content = ft.Container(
-            height=length + self.thumb.radius * 2,
-            width=self.thumb.radius * 2,
-            bgcolor=ft.colors.GREEN_100,
-            content=cv.Canvas(shapes=self.generate_shapes()),
-        )
+        self.content = self.generate_container()
         self.on_hover = self.change_cursor
         self.on_pan_start = self.change_value_on_click
         self.on_pan_update = self.change_value_on_drag
 
-    def generate_shapes(self):
-        # self.thumb.x = (
-        #     self.value * self.length / (self.max - self.min) + self.thumb.radius
-        # )
-        self.thumb.x = self.thumb.radius
-        self.thumb.y = (
+    def get_y(self, value):
+        return (
             self.length
             + self.thumb.radius
-            # - 50
-            - (1 - self.value / (self.max - self.min)) * self.length
+            - (value / (self.max - self.min)) * self.length
         )
+
+    def generate_shapes(self):
+        self.thumb.x = self.thumb.radius
+        self.thumb.y = self.get_y(self.value)
         self.track = cv.Rect(
             x=self.thumb.radius - self.thickness / 2,
-            # y=self.thumb.radius - self.thickness / 2,
             y=self.thumb.radius,
             width=self.thickness,
             border_radius=self.thickness / 2,
@@ -69,10 +59,7 @@ class VerticalSlider(ft.GestureDetector):
             width=self.thickness,
             border_radius=self.thickness / 2,
             paint=ft.Paint(color=ft.colors.RED),
-            # height=(1 - self.value / (self.max - self.min))
-            # * self.length
-            # / +self.thumb.radius,
-            height=70,
+            height=self.track.height + self.thumb.radius - self.thumb.y,
         )
         self.generate_divisions()
         shapes = [self.track, self.selected_track] + self.division_shapes + [self.thumb]
@@ -86,20 +73,37 @@ class VerticalSlider(ft.GestureDetector):
             if self.divisions > 1:
                 for i in range(1, self.divisions):
                     print(i)
-                    x = (self.track.width / self.divisions) * i + self.thumb.radius
-                    if x < self.selected_track.width + self.thumb.radius:
-                        color = self.division_color_on_selected
-                    else:
+                    y = (
+                        self.track.height
+                        + self.thumb.radius
+                        - (self.track.height / self.divisions) * (self.divisions - i)
+                    )
+                    if (
+                        y
+                        < self.track.height
+                        - self.selected_track.height
+                        + self.thumb.radius
+                    ):
                         color = self.division_color_on_track
-                    print(x)
+                    else:
+                        color = self.division_color_on_selected
+                    print(y)
                     self.division_shapes.append(
                         cv.Circle(
-                            x=x,
-                            y=self.thumb.radius,
+                            y=y,
+                            x=self.thumb.radius,
                             radius=self.thickness / 4,
                             paint=ft.Paint(color=color),
                         )
                     )
+
+    def generate_container(self):
+        return ft.Container(
+            height=self.length + self.thumb.radius * 2,
+            width=self.thumb.radius * 2,
+            bgcolor=ft.colors.GREEN_100,
+            content=cv.Canvas(shapes=self.generate_shapes()),
+        )
 
     def update_divisions(self):
         for division_shape in self.division_shapes:
@@ -131,17 +135,20 @@ class VerticalSlider(ft.GestureDetector):
         e.control.mouse_cursor = ft.MouseCursor.CLICK
         e.control.update()
 
+    def update_thumb_position(self, y):
+        self.value = self.get_value(y)
+        print(self.value)
+        self.selected_track.y = y
+        self.selected_track.height = self.track.height - y + self.thumb.radius
+        self.thumb.y = y
+
     def change_value_on_click(self, e: ft.DragStartEvent):
         y = max(
             self.thumb.radius, min(e.local_y, self.track.height + self.thumb.radius)
         )
         print(y)
         if self.divisions == None:
-            self.value = self.get_value(y)
-            print(self.value)
-            self.selected_track.y = y
-            self.selected_track.height = self.track.height - y + self.thumb.radius
-            self.thumb.y = y
+            self.update_thumb_position(y)
         else:
             discreet_x = self.find_closest_division_shape_x(y)
             self.value = self.get_value(discreet_x)
@@ -152,14 +159,12 @@ class VerticalSlider(ft.GestureDetector):
         self.page.update()
 
     def change_value_on_drag(self, e: ft.DragUpdateEvent):
-        x = max(
+        y = max(
             self.thumb.radius,
-            min(e.local_x + e.delta_x, self.track.width + self.thumb.radius),
+            min(e.local_y + e.delta_y, self.track.height + self.thumb.radius),
         )
         if self.divisions == None:
-            self.value = self.get_value(x)
-            self.selected_track.width = x - self.thumb.radius
-            self.thumb.x = x
+            self.update_thumb_position(y)
         else:
             discreet_x = self.find_closest_division_shape_x(x)
             self.value = self.get_value(discreet_x)
