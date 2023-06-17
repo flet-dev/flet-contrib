@@ -7,6 +7,7 @@ import flet.canvas as cv
 class VerticalSlider(ft.GestureDetector):
     def __init__(
         self,
+        vertical=False,
         length=200,
         thickness=5,
         value=200,
@@ -24,6 +25,7 @@ class VerticalSlider(ft.GestureDetector):
     ):
         super().__init__()
         self.value = value
+        self.vertical = vertical
         self.min = min
         self.max = max
         self.thickness = thickness
@@ -40,32 +42,34 @@ class VerticalSlider(ft.GestureDetector):
         self.on_pan_update = self.change_value_on_drag
 
     def generate_slider(self):
-        return ft.Container(
-            height=self.length + self.thumb.radius * 2,
-            width=self.thumb.radius * 2,
-            # bgcolor=ft.colors.GREEN_100,
-            content=cv.Canvas(shapes=self.generate_shapes()),
-        )
+        if self.vertical:
+            return ft.Container(
+                height=self.length + self.thumb.radius * 2,
+                width=self.thumb.radius * 2,
+                # bgcolor=ft.colors.GREEN_100,
+                content=cv.Canvas(shapes=self.generate_shapes()),
+            )
 
     def generate_shapes(self):
-        self.thumb.x = self.thumb.radius
-        self.thumb.y = self.get_y(self.value)
-        self.track = cv.Rect(
-            x=self.thumb.radius - self.thickness / 2,
-            y=self.thumb.radius,
-            width=self.thickness,
-            border_radius=self.thickness / 2,
-            paint=ft.Paint(color=self.track_color),
-            height=self.length,
-        )
-        self.selected_track = cv.Rect(
-            x=self.thumb.radius - self.thickness / 2,
-            y=self.thumb.y,
-            width=self.thickness,
-            border_radius=self.thickness / 2,
-            paint=ft.Paint(color=self.selected_track_color),
-            height=self.track.height + self.thumb.radius - self.thumb.y,
-        )
+        if self.vertical:
+            self.thumb.x = self.thumb.radius
+            self.thumb.y = self.get_y(self.value)
+            self.track = cv.Rect(
+                x=self.thumb.radius - self.thickness / 2,
+                y=self.thumb.radius,
+                width=self.thickness,
+                border_radius=self.thickness / 2,
+                paint=ft.Paint(color=self.track_color),
+                height=self.length,
+            )
+            self.selected_track = cv.Rect(
+                x=self.thumb.radius - self.thickness / 2,
+                y=self.thumb.y,
+                width=self.thickness,
+                border_radius=self.thickness / 2,
+                paint=ft.Paint(color=self.selected_track_color),
+                height=self.track.height + self.thumb.radius - self.thumb.y,
+            )
         self.generate_divisions()
         shapes = [self.track, self.selected_track] + self.division_shapes + [self.thumb]
         return shapes
@@ -77,33 +81,35 @@ class VerticalSlider(ft.GestureDetector):
         else:
             if self.divisions > 1:
                 for i in range(1, self.divisions):
-                    y = (
-                        self.track.height
-                        + self.thumb.radius
-                        - (self.track.height / self.divisions) * i
-                    )
-                    if y > self.get_y(self.value):
-                        color = self.division_color_on_selected
-                    else:
-                        color = self.division_color_on_track
-                    self.division_shapes.append(
-                        cv.Circle(
-                            y=y,
-                            x=self.thumb.radius,
-                            radius=self.thickness / 4,
-                            paint=ft.Paint(color=color),
+                    if self.vertical:
+                        y = (
+                            self.track.height
+                            + self.thumb.radius
+                            - (self.track.height / self.divisions) * i
                         )
-                    )
+                        if y > self.get_y(self.value):
+                            color = self.division_color_on_selected
+                        else:
+                            color = self.division_color_on_track
+                        self.division_shapes.append(
+                            cv.Circle(
+                                y=y,
+                                x=self.thumb.radius,
+                                radius=self.thickness / 4,
+                                paint=ft.Paint(color=color),
+                            )
+                        )
 
     def update_divisions(self):
         for division_shape in self.division_shapes:
-            if (
-                division_shape.y
-                < self.track.height - self.selected_track.height + self.thumb.radius
-            ):
-                color = self.division_color_on_track
-            else:
-                color = self.division_color_on_selected
+            if self.vertical:
+                if (
+                    division_shape.y
+                    < self.track.height - self.selected_track.height + self.thumb.radius
+                ):
+                    color = self.division_color_on_track
+                else:
+                    color = self.division_color_on_selected
             division_shape.paint.color = color
 
     def find_closest_division_shape_y(self, y):

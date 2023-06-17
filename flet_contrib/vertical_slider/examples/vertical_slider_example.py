@@ -9,6 +9,7 @@ def main(page: ft.Page):
 
     horizonal_slider = HorizontalSlider()
     vertical_slider = VerticalSlider(
+        vertical=True,
         divisions=10,
         min=100,
         max=600,
