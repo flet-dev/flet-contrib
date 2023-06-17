@@ -13,10 +13,10 @@ class VerticalSlider(ft.GestureDetector):
         value=200,
         min=100,
         max=900,
-        thumb=cv.Circle(
-            radius=10,
-            paint=ft.Paint(color=ft.colors.PRIMARY),
-        ),
+        # thumb=cv.Circle(
+        #     radius=10,
+        #     paint=ft.Paint(color=ft.colors.PRIMARY),
+        # ),
         divisions=None,
         track_color=ft.colors.OUTLINE_VARIANT,
         selected_track_color=ft.colors.PRIMARY,
@@ -35,7 +35,7 @@ class VerticalSlider(ft.GestureDetector):
         self.selected_track_color = selected_track_color
         self.division_color_on_track = division_color_on_track
         self.division_color_on_selected = division_color_on_selected
-        self.thumb = thumb
+        # self.thumb = thumb
         self.content = self.generate_slider()
         self.on_hover = self.change_cursor
         self.on_pan_start = self.change_value_on_click
@@ -53,7 +53,13 @@ class VerticalSlider(ft.GestureDetector):
         return c
 
     def generate_shapes(self):
+        self.thumb = cv.Circle(
+            radius=10,
+            paint=ft.Paint(color=ft.colors.PRIMARY),
+        )
+
         if self.vertical:
+            print("vertical")
             self.thumb.x = self.thumb.radius
             self.thumb.y = self.get_position(self.value)
             self.track = cv.Rect(
@@ -75,6 +81,8 @@ class VerticalSlider(ft.GestureDetector):
         else:
             self.thumb.x = self.get_position(self.value)
             self.thumb.y = self.thumb.radius
+            print(f"Thumb position: x={self.thumb.x}, y={self.thumb.y}")
+
             self.track = cv.Rect(
                 x=self.thumb.radius,
                 y=self.thumb.radius - self.thickness / 2,
