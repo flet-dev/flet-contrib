@@ -39,16 +39,6 @@ class VerticalSlider(ft.GestureDetector):
         self.on_pan_start = self.change_value_on_click
         self.on_pan_update = self.change_value_on_drag
 
-    def get_y(self, value):
-        return self.thumb.radius + ((self.max - value) * self.length) / (
-            self.max - self.min
-        )
-        # return (
-        #     self.length
-        #     + self.thumb.radius
-        #     - (value / (self.max - self.min)) * self.length
-        # )
-
     def generate_shapes(self):
         self.thumb.x = self.thumb.radius
         self.thumb.y = self.get_y(self.value)
@@ -84,7 +74,6 @@ class VerticalSlider(ft.GestureDetector):
                         + self.thumb.radius
                         - (self.track.height / self.divisions) * i
                     )
-                    # print(f"i:{i}, y:{y}")
                     if (
                         y
                         < self.track.height
@@ -141,6 +130,11 @@ class VerticalSlider(ft.GestureDetector):
     def get_value(self, y):
         return self.max - (
             (y - self.thumb.radius) * (self.max - self.min) / self.track.height
+        )
+
+    def get_y(self, value):
+        return self.thumb.radius + ((self.max - value) * self.length) / (
+            self.max - self.min
         )
 
     def change_cursor(self, e: ft.HoverEvent):
