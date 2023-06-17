@@ -51,8 +51,8 @@ class VerticalSlider(ft.GestureDetector):
         self.thumb.y = (
             self.length
             + self.thumb.radius
-            - 50
-            # + self.value * self.length / (self.max - self.min)
+            # - 50
+            - (1 - self.value / (self.max - self.min)) * self.length
         )
         self.track = cv.Rect(
             x=self.thumb.radius - self.thickness / 2,
@@ -65,11 +65,14 @@ class VerticalSlider(ft.GestureDetector):
         )
         self.selected_track = cv.Rect(
             x=self.thumb.radius - self.thickness / 2,
-            y=self.thumb.radius,
+            y=self.thumb.y,
             width=self.thickness,
             border_radius=self.thickness / 2,
             paint=ft.Paint(color=ft.colors.RED),
-            height=self.value * self.length / (self.max - self.min) + self.thumb.radius,
+            # height=(1 - self.value / (self.max - self.min))
+            # * self.length
+            # / +self.thumb.radius,
+            height=70,
         )
         self.generate_divisions()
         shapes = [self.track, self.selected_track] + self.division_shapes + [self.thumb]
@@ -119,28 +122,31 @@ class VerticalSlider(ft.GestureDetector):
 
         return self.track.width + self.thumb.radius
 
-    def get_value(self, x):
-        return (x - self.thumb.radius) * (
+    def get_value(self, y):
+        return (y - self.thumb.radius) * (
             self.max - self.min
-        ) / self.track.width + self.min
+        ) / self.track.height + self.min
 
     def change_cursor(self, e: ft.HoverEvent):
         e.control.mouse_cursor = ft.MouseCursor.CLICK
         e.control.update()
 
     def change_value_on_click(self, e: ft.DragStartEvent):
-        x = max(self.thumb.radius, min(e.local_x, self.track.width + self.thumb.radius))
-        print(x)
+        y = max(
+            self.thumb.radius, min(e.local_y, self.track.height + self.thumb.radius)
+        )
+        print(y)
         if self.divisions == None:
-            self.value = self.get_value(x)
+            self.value = self.get_value(y)
             print(self.value)
-            self.selected_track.width = x - self.thumb.radius
-            self.thumb.x = x
+            self.selected_track.y = y
+            self.selected_track.height = self.track.height - y + self.thumb.radius
+            self.thumb.y = y
         else:
-            discreet_x = self.find_closest_division_shape_x(x)
+            discreet_x = self.find_closest_division_shape_x(y)
             self.value = self.get_value(discreet_x)
             self.selected_track.width = discreet_x - self.thumb.radius
-            self.thumb.x = discreet_x
+            self.thumb.y = discreet_x
 
         self.update_divisions()
         self.page.update()
