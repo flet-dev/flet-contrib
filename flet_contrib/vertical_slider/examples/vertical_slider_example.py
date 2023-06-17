@@ -8,7 +8,9 @@ def main(page: ft.Page):
         print(e.control.value)
 
     # horizonal_slider1 = HorizontalSlider()
-    horizonal_slider12 = VerticalSlider(min=0, max=500, value=500, divisions=5)
+    horizonal_slider12 = VerticalSlider(
+        min=0, max=500, value=500, divisions=20, length=500
+    )
     vertical_slider = VerticalSlider(
         vertical=True,
         divisions=10,
