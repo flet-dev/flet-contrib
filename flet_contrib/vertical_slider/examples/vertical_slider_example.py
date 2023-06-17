@@ -8,15 +8,22 @@ def main(page: ft.Page):
         print(e.control.value)
 
     # horizonal_slider1 = HorizontalSlider()
+    def slider_changed():
+        print(horizonal_slider12.value)
+
+    def vertical_slider_changed():
+        print(vertical_slider.value)
+
     horizonal_slider12 = VerticalSlider(
-        min=0, max=500, value=500, divisions=20, length=500
+        min=0, max=500, value=500, divisions=20, length=500, on_change=slider_changed
     )
     vertical_slider = VerticalSlider(
         vertical=True,
-        divisions=10,
+        # divisions=10,
         min=100,
         max=600,
         value=500,
+        on_change=vertical_slider_changed,
     )
     default_slider = ft.Slider(
         min=0,

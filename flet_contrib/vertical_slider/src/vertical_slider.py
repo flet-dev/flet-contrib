@@ -7,6 +7,7 @@ import flet.canvas as cv
 class VerticalSlider(ft.GestureDetector):
     def __init__(
         self,
+        on_change=None,
         vertical=False,
         length=200,
         thickness=5,
@@ -23,6 +24,7 @@ class VerticalSlider(ft.GestureDetector):
     ):
         super().__init__()
         self.value = value
+        self.on_change = on_change
         self.vertical = vertical
         self.min = min
         self.max = max
@@ -132,7 +134,6 @@ class VerticalSlider(ft.GestureDetector):
                             color = self.division_color_on_selected
                         else:
                             color = self.division_color_on_track
-                        print(x)
                         self.division_shapes.append(
                             cv.Circle(
                                 x=x,
@@ -147,13 +148,13 @@ class VerticalSlider(ft.GestureDetector):
             if self.vertical:
                 if (
                     division_shape.y
-                    < self.length - self.selected_track.height + self.thumb.radius
+                    < self.length - self.selected_track.height + self.thumb_radius
                 ):
                     color = self.division_color_on_track
                 else:
                     color = self.division_color_on_selected
             else:
-                if division_shape.x < self.selected_track.width + self.thumb.radius:
+                if division_shape.x < self.selected_track.width + self.thumb_radius:
                     color = self.division_color_on_selected
                 else:
                     color = self.division_color_on_track
@@ -234,6 +235,8 @@ class VerticalSlider(ft.GestureDetector):
             discrete_position = self.find_closest_division_shape_position(position)
             self.move_thumb(discrete_position)
         self.update_divisions()
+        if self.on_change is not None:
+            self.on_change()
         self.update()
 
     def change_value_on_click(self, e: ft.DragStartEvent):
