@@ -165,10 +165,26 @@ class VerticalSlider(ft.GestureDetector):
                     else:
                         return division_shape.y
 
-        if abs(self.thumb.radius - position) < abs(previous_y - position):
-            return self.thumb.radius
+            if abs(self.thumb.radius - position) < abs(previous_y - position):
+                return self.thumb.radius
+            else:
+                return previous_y
         else:
-            return previous_y
+            previous_x = self.thumb.radius
+            for division_shape in self.division_shapes:
+                if position > division_shape.x:
+                    previous_x = division_shape.x
+                else:
+                    if abs(position - previous_x) < abs(division_shape.x - position):
+                        return previous_x
+                    else:
+                        return division_shape.x
+            if abs(previous_x - position) < abs(
+                self.length + self.thumb.radius - position
+            ):
+                return previous_x
+            else:
+                return self.track.width + self.thumb.radius
 
     def get_value(self, position):
         if self.vertical:
@@ -177,6 +193,10 @@ class VerticalSlider(ft.GestureDetector):
                 * (self.max - self.min)
                 / self.track.height
             )
+        else:
+            return (position - self.thumb.radius) * (
+                self.max - self.min
+            ) / self.track.width + self.min
 
     def get_position(self, value):
         if self.vertical:
@@ -199,6 +219,8 @@ class VerticalSlider(ft.GestureDetector):
                 self.track.height - position + self.thumb.radius
             )
             self.thumb.y = position
+        else:
+            print("Update thumb position for horizontal")
 
     def change_value_on_click(self, e: ft.DragStartEvent):
         if self.vertical:
