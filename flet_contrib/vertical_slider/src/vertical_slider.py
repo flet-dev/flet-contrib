@@ -81,7 +81,7 @@ class VerticalSlider(ft.GestureDetector):
                         + self.thumb.radius
                         - (self.track.height / self.divisions) * i
                     )
-                    print(f"i:{i}, y:{y}")
+                    # print(f"i:{i}, y:{y}")
                     if (
                         y
                         < self.track.height
@@ -121,9 +121,7 @@ class VerticalSlider(ft.GestureDetector):
 
     def find_closest_division_shape_y(self, y):
         previous_y = self.thumb.radius + self.track.height
-        # print(f"Previous y: {previous_y}")
         for division_shape in self.division_shapes:
-            # print(f"y={y}, division_shape.y={division_shape.y}")
             if y < division_shape.y:
                 previous_y = division_shape.y
             else:
@@ -138,9 +136,17 @@ class VerticalSlider(ft.GestureDetector):
             return previous_y
 
     def get_value(self, y):
-        return (y - self.thumb.radius) * (
-            self.max - self.min
-        ) / self.track.height + self.min
+        return (
+            self.min
+            + self.max
+            - (
+                (y - self.thumb.radius) * (self.max - self.min) / self.track.height
+                + self.min
+            )
+        )
+        # return (self.track.height * (self.max - self.min)) / (
+        #     self.thumb.radius + self.track.height - y
+        # ) + self.min
 
     def change_cursor(self, e: ft.HoverEvent):
         e.control.mouse_cursor = ft.MouseCursor.CLICK
@@ -148,6 +154,7 @@ class VerticalSlider(ft.GestureDetector):
 
     def update_thumb_position(self, y):
         self.value = self.get_value(y)
+        print(f"Value: {self.value}")
         self.selected_track.y = y
         self.selected_track.height = self.track.height - y + self.thumb.radius
         self.thumb.y = y
