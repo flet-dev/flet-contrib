@@ -14,11 +14,13 @@ class VerticalSlider(ft.GestureDetector):
         max=800,
         thumb=cv.Circle(
             radius=20,
-            paint=ft.Paint(color=ft.colors.GREY_900),
+            paint=ft.Paint(color=ft.colors.PRIMARY),
         ),
         divisions=4,
-        division_color_on_track=ft.colors.WHITE,
-        division_color_on_selected=ft.colors.BLUE,
+        track_color=ft.colors.OUTLINE_VARIANT,
+        selected_track_color=ft.colors.PRIMARY,
+        division_color_on_track=ft.colors.RED,
+        division_color_on_selected=ft.colors.OUTLINE,
     ):
         super().__init__()
         self.value = value
@@ -27,6 +29,8 @@ class VerticalSlider(ft.GestureDetector):
         self.thickness = thickness
         self.length = length
         self.divisions = divisions
+        self.track_color = track_color
+        self.selected_track_color = selected_track_color
         self.division_color_on_track = division_color_on_track
         self.division_color_on_selected = division_color_on_selected
         self.thumb = thumb
@@ -50,7 +54,7 @@ class VerticalSlider(ft.GestureDetector):
             y=self.thumb.radius,
             width=self.thickness,
             border_radius=self.thickness / 2,
-            paint=ft.Paint(color=ft.colors.GREY_500),
+            paint=ft.Paint(color=self.track_color),
             height=self.length,
         )
         self.selected_track = cv.Rect(
@@ -58,7 +62,7 @@ class VerticalSlider(ft.GestureDetector):
             y=self.thumb.y,
             width=self.thickness,
             border_radius=self.thickness / 2,
-            paint=ft.Paint(color=ft.colors.RED),
+            paint=ft.Paint(color=self.selected_track_color),
             height=self.track.height + self.thumb.radius - self.thumb.y,
         )
         self.generate_divisions()
