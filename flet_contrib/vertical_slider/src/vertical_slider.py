@@ -116,7 +116,9 @@ class VerticalSlider(ft.GestureDetector):
 
     def find_closest_division_shape_y(self, y):
         previous_y = self.thumb.radius + self.track.height
+        print(f"Previous y: {previous_y}")
         for division_shape in self.division_shapes:
+            print(f"y={y}, division_shape.y={division_shape.y}")
             if y < division_shape.y:
                 previous_y = division_shape.y
             else:
