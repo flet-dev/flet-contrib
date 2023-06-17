@@ -27,10 +27,10 @@ def main(page: ft.Page):
     )
 
     page.add(
-        # ft.Row(
-        #     [horizonal_slider1],
-        #     alignment=ft.MainAxisAlignment.CENTER,
-        # ),
+        ft.Row(
+            [horizonal_slider1],
+            alignment=ft.MainAxisAlignment.CENTER,
+        ),
         # ft.Row(
         #     [horizonal_slider12],
         #     alignment=ft.MainAxisAlignment.CENTER,
