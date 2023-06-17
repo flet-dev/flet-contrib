@@ -8,7 +8,7 @@ def main(page: ft.Page):
         print(horizontal_slider.value)
 
     horizontal_slider = FlexibleSlider(
-        divisions=10,
+        # divisions=10,
         min=100,
         max=600,
         value=500,

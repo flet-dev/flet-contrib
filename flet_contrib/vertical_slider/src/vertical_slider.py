@@ -58,50 +58,42 @@ class FlexibleSlider(ft.GestureDetector):
             radius=self.thumb_radius,
             paint=ft.Paint(color=self.thumb_color),
         )
+
+        self.track = cv.Rect(
+            border_radius=self.thickness / 2,
+            paint=ft.Paint(color=self.track_color),
+        )
+        self.selected_track = cv.Rect(
+            border_radius=self.thickness / 2,
+            paint=ft.Paint(color=self.selected_track_color),
+        )
+
         if self.vertical:
             self.thumb.x = self.thumb_radius
             self.thumb.y = self.get_position(self.value)
+            self.track.x = self.thumb_radius - self.thickness / 2
+            self.track.y = self.thumb_radius
+            self.track.width = self.thickness
+            self.track.height = self.length
+            self.selected_track.x = self.thumb_radius - self.thickness / 2
+            self.selected_track.y = self.thumb.y
+            self.selected_track.width = self.thickness
+            self.selected_track.height = self.length + self.thumb_radius - self.thumb.y
+
         else:
             self.thumb.x = self.get_position(self.value)
             self.thumb.y = self.thumb_radius
+            self.track.x = self.thumb_radius
+            self.track.y = self.thumb_radius - self.thickness / 2
+            self.track.width = self.length
+            self.track.height = self.thickness
+            self.selected_track.x = self.thumb_radius
+            self.selected_track.y = self.thumb_radius - self.thickness / 2
+            self.selected_track.width = (
+                self.value * self.length / (self.max - self.min) + self.thumb_radius
+            )
+            self.selected_track.height = self.thickness
 
-        # track
-
-        if self.vertical:
-            self.track = cv.Rect(
-                x=self.thumb_radius - self.thickness / 2,
-                y=self.thumb_radius,
-                width=self.thickness,
-                border_radius=self.thickness / 2,
-                paint=ft.Paint(color=self.track_color),
-                height=self.length,
-            )
-            self.selected_track = cv.Rect(
-                x=self.thumb_radius - self.thickness / 2,
-                y=self.thumb.y,
-                width=self.thickness,
-                border_radius=self.thickness / 2,
-                paint=ft.Paint(color=self.selected_track_color),
-                height=self.length + self.thumb_radius - self.thumb.y,
-            )
-        else:
-            self.track = cv.Rect(
-                x=self.thumb_radius,
-                y=self.thumb_radius - self.thickness / 2,
-                height=self.thickness,
-                border_radius=self.thickness / 2,
-                paint=ft.Paint(color=self.track_color),
-                width=self.length,
-            )
-            self.selected_track = cv.Rect(
-                x=self.thumb_radius,
-                y=self.thumb_radius - self.thickness / 2,
-                height=self.thickness,
-                border_radius=self.thickness / 2,
-                paint=ft.Paint(color=self.selected_track_color),
-                width=self.value * self.length / (self.max - self.min)
-                + self.thumb_radius,
-            )
         self.generate_divisions()
         shapes = [self.track, self.selected_track] + self.division_shapes + [self.thumb]
         return shapes
@@ -220,7 +212,7 @@ class FlexibleSlider(ft.GestureDetector):
 
     def move_thumb(self, position):
         self.value = self.get_value(position)
-        print(f"Value: {self.value}")
+        # print(f"Value: {self.value}")
         if self.vertical:
             self.selected_track.y = position
             self.selected_track.height = (
