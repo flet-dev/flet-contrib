@@ -376,18 +376,10 @@ class HorizontalSlider(ft.GestureDetector):
 
     def change_value_on_click(self, e: ft.DragStartEvent):
         x = max(self.thumb.radius, min(e.local_x, self.track.width + self.thumb.radius))
-        # print(x)
         if self.divisions == None:
-            # self.value = self.get_value(x)
-            # print(self.value)
-            # self.selected_track.width = x - self.thumb.radius
-            # self.thumb.x = x
             self.update_thumb_position(x)
         else:
             discrete_x = self.find_closest_division_shape_x(x)
-            # self.value = self.get_value(discreet_x)
-            # self.selected_track.width = discreet_x - self.thumb.radius
-            # self.thumb.x = discreet_x
             self.update_thumb_position(discrete_x)
 
         self.update_divisions()
@@ -399,16 +391,10 @@ class HorizontalSlider(ft.GestureDetector):
             min(e.local_x + e.delta_x, self.track.width + self.thumb.radius),
         )
         if self.divisions == None:
-            # self.value = self.get_value(x)
-            # self.selected_track.width = x - self.thumb.radius
-            # self.thumb.x = x
             self.update_thumb_position(x)
 
         else:
             discrete_x = self.find_closest_division_shape_x(x)
-            # self.value = self.get_value(discreet_x)
-            # self.selected_track.width = discreet_x - self.thumb.radius
-            # self.thumb.x = discreet_x
             self.update_thumb_position(discrete_x)
         self.update_divisions()
         self.page.update()
