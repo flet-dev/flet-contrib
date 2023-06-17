@@ -42,13 +42,14 @@ class VerticalSlider(ft.GestureDetector):
         self.on_pan_update = self.change_value_on_drag
 
     def generate_slider(self):
+        c = ft.Container(content=cv.Canvas(shapes=self.generate_shapes()))
         if self.vertical:
-            return ft.Container(
-                height=self.length + self.thumb.radius * 2,
-                width=self.thumb.radius * 2,
-                # bgcolor=ft.colors.GREEN_100,
-                content=cv.Canvas(shapes=self.generate_shapes()),
-            )
+            c.height = self.length + self.thumb.radius * 2
+            c.width = self.thumb.radius * 2
+        else:
+            c.width = (self.length + self.thumb.radius * 2,)
+            c.height = (self.thumb.radius * 2,)
+        return c
 
     def generate_shapes(self):
         if self.vertical:
@@ -69,6 +70,28 @@ class VerticalSlider(ft.GestureDetector):
                 border_radius=self.thickness / 2,
                 paint=ft.Paint(color=self.selected_track_color),
                 height=self.track.height + self.thumb.radius - self.thumb.y,
+            )
+        else:
+            self.thumb.x = (
+                self.value * self.length / (self.max - self.min) + self.thumb.radius
+            )
+            self.thumb.y = self.thumb.radius
+            self.track = cv.Rect(
+                x=self.thumb.radius,
+                y=self.thumb.radius - self.thickness / 2,
+                height=self.thickness,
+                border_radius=self.thickness / 2,
+                paint=ft.Paint(color=ft.colors.GREY_500),
+                width=self.length,
+            )
+            self.selected_track = cv.Rect(
+                x=self.thumb.radius,
+                y=self.thumb.radius - self.thickness / 2,
+                height=self.thickness,
+                border_radius=self.thickness / 2,
+                paint=ft.Paint(color=ft.colors.RED),
+                width=self.value * self.length / (self.max - self.min)
+                + self.thumb.radius,
             )
         self.generate_divisions()
         shapes = [self.track, self.selected_track] + self.division_shapes + [self.thumb]
