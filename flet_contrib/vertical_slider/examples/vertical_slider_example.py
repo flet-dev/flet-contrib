@@ -8,7 +8,12 @@ def main(page: ft.Page):
         print(e.control.value)
 
     horizonal_slider = HorizontalSlider()
-    vertical_slider = VerticalSlider()
+    vertical_slider = VerticalSlider(
+        divisions=10,
+        min=100,
+        max=600,
+        value=500,
+    )
     default_slider = ft.Slider(
         min=0,
         max=100,

@@ -82,15 +82,10 @@ class VerticalSlider(ft.GestureDetector):
                         + self.thumb.radius
                         - (self.track.height / self.divisions) * i
                     )
-                    if (
-                        y
-                        < self.track.height
-                        - self.selected_track.height
-                        + self.thumb.radius
-                    ):
-                        color = self.division_color_on_track
-                    else:
+                    if y > self.get_y(self.value):
                         color = self.division_color_on_selected
+                    else:
+                        color = self.division_color_on_track
                     self.division_shapes.append(
                         cv.Circle(
                             y=y,
