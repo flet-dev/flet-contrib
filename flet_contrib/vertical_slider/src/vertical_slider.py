@@ -141,7 +141,6 @@ class VerticalSlider(ft.GestureDetector):
 
     def update_thumb_position(self, y):
         self.value = self.get_value(y)
-        # print(self.value)
         self.selected_track.y = y
         self.selected_track.height = self.track.height - y + self.thumb.radius
         self.thumb.y = y
@@ -150,14 +149,9 @@ class VerticalSlider(ft.GestureDetector):
         y = max(
             self.thumb.radius, min(e.local_y, self.track.height + self.thumb.radius)
         )
-        # print(y)
         if self.divisions == None:
             self.update_thumb_position(y)
         else:
-            # discreet_x = self.find_closest_division_shape_x(y)
-            # self.value = self.get_value(discreet_x)
-            # self.selected_track.width = discreet_x - self.thumb.radius
-            # self.thumb.y = discreet_x
             discrete_y = self.find_closest_division_shape_y(y)
             self.update_thumb_position(discrete_y)
 
@@ -174,9 +168,6 @@ class VerticalSlider(ft.GestureDetector):
         else:
             discrete_y = self.find_closest_division_shape_y(y)
             self.update_thumb_position(discrete_y)
-            # self.value = self.get_value(discreet_y)
-            # self.selected_track.height = discreet_y - self.thumb.radius
-            # self.thumb.y = discreet_y
         self.update_divisions()
         self.page.update()
 
