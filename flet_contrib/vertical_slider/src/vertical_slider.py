@@ -132,7 +132,10 @@ class VerticalSlider(ft.GestureDetector):
                 else:
                     return division_shape.y
 
-        return self.thumb.radius
+        if abs(self.thumb.radius - y) < abs(previous_y - y):
+            return self.thumb.radius
+        else:
+            return previous_y
 
     def get_value(self, y):
         return (y - self.thumb.radius) * (
