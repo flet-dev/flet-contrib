@@ -8,7 +8,7 @@ def main(page: ft.Page):
         print(e.control.value)
 
     horizonal_slider1 = HorizontalSlider()
-    horizonal_slider12 = VerticalSlider(min=0, max=500, value=100)
+    horizonal_slider12 = VerticalSlider(min=0, max=500, value=100, divisions=5)
     vertical_slider = VerticalSlider(
         vertical=True,
         divisions=10,
@@ -27,14 +27,14 @@ def main(page: ft.Page):
     )
 
     page.add(
-        ft.Row(
-            [horizonal_slider1],
-            alignment=ft.MainAxisAlignment.CENTER,
-        ),
         # ft.Row(
-        #     [horizonal_slider12],
+        #     [horizonal_slider1],
         #     alignment=ft.MainAxisAlignment.CENTER,
         # ),
+        ft.Row(
+            [horizonal_slider12],
+            alignment=ft.MainAxisAlignment.CENTER,
+        ),
         default_slider,
         vertical_slider,
     )

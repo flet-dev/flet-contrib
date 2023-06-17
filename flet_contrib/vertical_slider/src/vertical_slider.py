@@ -47,8 +47,9 @@ class VerticalSlider(ft.GestureDetector):
             c.height = self.length + self.thumb.radius * 2
             c.width = self.thumb.radius * 2
         else:
-            c.width = (self.length + self.thumb.radius * 2,)
-            c.height = (self.thumb.radius * 2,)
+            c.width = self.length + self.thumb.radius * 2
+            c.height = self.thumb.radius * 2
+            c.bgcolor = ft.colors.GREEN_200
         return c
 
     def generate_shapes(self):
@@ -65,7 +66,7 @@ class VerticalSlider(ft.GestureDetector):
             )
             self.selected_track = cv.Rect(
                 x=self.thumb.radius - self.thickness / 2,
-                y=self.thumb.y,
+                y=self.thumb.radius,
                 width=self.thickness,
                 border_radius=self.thickness / 2,
                 paint=ft.Paint(color=self.selected_track_color),
@@ -220,7 +221,8 @@ class VerticalSlider(ft.GestureDetector):
             )
             self.thumb.y = position
         else:
-            print("Update thumb position for horizontal")
+            self.selected_track.width = position - self.thumb.radius
+            self.thumb.x = position
 
     def change_value_on_click(self, e: ft.DragStartEvent):
         if self.vertical:
@@ -232,6 +234,15 @@ class VerticalSlider(ft.GestureDetector):
             else:
                 discrete_y = self.find_closest_division_shape_position(y)
                 self.update_thumb_position(discrete_y)
+        else:
+            x = max(
+                self.thumb.radius, min(e.local_x, self.track.width + self.thumb.radius)
+            )
+            if self.divisions == None:
+                self.update_thumb_position(x)
+            else:
+                discrete_x = self.find_closest_division_shape_position(x)
+                self.update_thumb_position(discrete_x)
 
         self.update_divisions()
         self.page.update()
@@ -247,6 +258,17 @@ class VerticalSlider(ft.GestureDetector):
             else:
                 discrete_y = self.find_closest_division_shape_position(y)
                 self.update_thumb_position(discrete_y)
+        else:
+            x = max(
+                self.thumb.radius,
+                min(e.local_x + e.delta_x, self.track.width + self.thumb.radius),
+            )
+            if self.divisions == None:
+                self.update_thumb_position(x)
+
+            else:
+                discrete_x = self.find_closest_division_shape_position(x)
+                self.update_thumb_position(discrete_x)
         self.update_divisions()
         self.page.update()
 
