@@ -16,7 +16,7 @@ def main(page: ft.Page):
         active_color=ft.colors.BLUE_500,
         inactive_color=ft.colors.YELLOW_300,
         thumb_color=ft.colors.GREEN,
-        thumb_radius=15,
+        thumb_radius=0,
         on_change=horizontal_slider_changed,
     )
 

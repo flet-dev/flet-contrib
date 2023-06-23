@@ -46,10 +46,10 @@ class FlexibleSlider(ft.GestureDetector):
         c = ft.Container(content=cv.Canvas(shapes=self.generate_shapes()))
         if self.vertical:
             c.height = self.length + self.thumb_radius * 2
-            c.width = self.thumb.radius * 2
+            c.width = max(self.thickness, self.thumb.radius * 2)
         else:
             c.width = self.length + self.thumb_radius * 2
-            c.height = self.thumb_radius * 2
+            c.height = max(self.thickness, self.thumb_radius * 2)
         return c
 
     def generate_shapes(self):
