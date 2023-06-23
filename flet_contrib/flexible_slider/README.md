@@ -116,12 +116,14 @@ The minimum value the user can select.
 
 Defaults to `0.0`. Must be less than or equal to max.
 
-If the max is equal to the min, then the slider is disabled.
-
 ### `max`
 
 The maximum value the user can select.
 
 Defaults to `1.0`. Must be greater than or equal to min.
 
-If the max is equal to the min, then the slider is disabled.
+## Events
+
+### `on_change`
+
+Fires when the value of the Slider is changed.

@@ -9,10 +9,7 @@ def main(page: ft.Page):
 
     vertical_slider = FlexibleSlider(
         vertical=True,
-        divisions=10,
-        min=100,
-        max=600,
-        value=500,
+        divisions=5,
         on_change=vertical_slider_changed,
     )
 
