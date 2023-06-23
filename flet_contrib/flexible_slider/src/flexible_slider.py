@@ -17,10 +17,10 @@ class FlexibleSlider(ft.GestureDetector):
         thumb_radius=10,
         thumb_color=ft.colors.PRIMARY,
         divisions=None,
-        track_color=ft.colors.OUTLINE_VARIANT,
-        selected_track_color=ft.colors.PRIMARY,
-        division_color_on_track=ft.colors.PRIMARY_CONTAINER,
-        division_color_on_selected=ft.colors.OUTLINE,
+        inactive_color=ft.colors.OUTLINE_VARIANT,
+        active_color=ft.colors.PRIMARY,
+        division_inactive_color=ft.colors.PRIMARY_CONTAINER,
+        division_active_color=ft.colors.OUTLINE,
     ):
         super().__init__()
         self.value = value
@@ -33,10 +33,10 @@ class FlexibleSlider(ft.GestureDetector):
         self.thumb_radius = thumb_radius
         self.thumb_color = thumb_color
         self.divisions = divisions
-        self.track_color = track_color
-        self.selected_track_color = selected_track_color
-        self.division_color_on_track = division_color_on_track
-        self.division_color_on_selected = division_color_on_selected
+        self.track_color = inactive_color
+        self.selected_track_color = active_color
+        self.division_color_on_track = division_inactive_color
+        self.division_color_on_selected = division_active_color
         self.content = self.generate_slider()
         self.on_hover = self.change_cursor
         self.on_pan_start = self.change_value_on_click
