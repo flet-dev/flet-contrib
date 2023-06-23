@@ -2,37 +2,36 @@
 
 `FlexibleSlider` can be configured to be horizontal or vertical.
 
-`VerticalSplitter` inherits from [`Row`](https://flet.dev/docs/controls/row).
+`FlexibleSlider` inherits from [`GestureDetector`](https://flet.dev/docs/controls/gesturedetector).
 
 ## Examples
 
-[Live example](https://flet-controls-gallery.fly.dev/contrib/verticalsplitter)
+[Live example](https://flet-controls-gallery.fly.dev/contrib/flexibleslider)
 
-### VerticalSplitter example
+### Vertical slider example
 
 ```python
 import flet as ft
 
-from flet_contrib.vertical_splitter import VerticalSplitter, FixedPane
+from flet_contrib.flexible_slider import FlexibleSlider
 
 
 def main(page: ft.Page):
-    c_left = ft.Container(bgcolor=ft.colors.BLUE_400)
+    def vertical_slider_changed():
+        print(vertical_slider.value)
 
-    c_right = ft.Container(bgcolor=ft.colors.YELLOW_400)
-
-    vertical_splitter = VerticalSplitter(
-        # height=400,
-        expand=True,
-        right_pane=c_right,
-        left_pane=c_left,
-        fixed_pane_min_width=200,
-        fixed_pane_width=300,
-        fixed_pane_max_width=400,
-        fixed_pane=FixedPane.RIGHT,
+    vertical_slider = FlexibleSlider(
+        vertical=True,
+        divisions=10,
+        min=100,
+        max=600,
+        value=500,
+        on_change=vertical_slider_changed,
     )
 
-    page.add(vertical_splitter)
+    page.add(
+        vertical_slider,
+    )
 
 
 ft.app(target=main)
@@ -40,38 +39,89 @@ ft.app(target=main)
 
 ## Properties
 
-### `left_pane`
+### `vertical`
 
-A child Control contained by the left pane of the vertical splitter.
+If `vertical` property is `False`, the slider will be displayed horuzontally and if it set to `True`, the slider will be displated vertically. 
 
-### `right_pane`
+The detault value is `False`.
 
-A child Control contained by the right pane of the vertical splitter.
+### `length`
 
-### `fixed_pane`
-
-Configures which pane will have a `fixed_pane_width`, `fixed_pane_minumum_width` and `fixed_pane_maximum_width` properties, while the other pane will have `expand` property set to `True` and will take up the remainer of the VerticalSpliitter width. The value must be an instance of the `FixedPane` class:
-
-```
-vertical_splitter.fixed_pane = FixedPane.RIGHT
-```
-The default value is `FixedPane.LEFT`.
-
-### `fixed_pane_width`
-
-Width in virtual pixels of `left_pane` or `right_pane` container, depending on the `fixed_pane` property. 
-
-The default value is `100`.
-
-### `fixed_pane_min_width`
-
-Minimum width in virtual pixels of `left_pane` or `right_pane` container when dragging the splitter, depending on the `fixed_pane` property. 
-
-The default value is `50`.
-
-
-### `fixed_pane_max_width`
-
-Maximum width in virtual pixels of `left_pane` or `right_pane` container when dragging the splitter, depending on the `fixed_pane` property. 
+Length of the slider track in virtual pixels.
 
 The default value is `200`.
+
+### `thickness`
+
+Thickness of the slider track in virtual pixels.
+
+The default value is `5`.
+
+### `active_color`
+
+The [color](https://flet.dev/docs/guides/python/colors/) to use for the portion of the slider track that is active.
+
+The "active" side of the slider is the side between the thumb and the minimum value.
+
+The default value is `ft.colors.PRIMARY`.
+
+### `inactive_color`
+
+The [color](https://flet.dev/docs/guides/python/colors/) for the inactive portion of the slider track.
+
+The "inactive" side of the slider is the side between the thumb and the maximum value.
+
+The default value is `ft.colors.OUTLINE_VARIANT`.
+
+### `divisions`
+
+The number of discrete divisions.
+
+If not set, the slider is continuous.
+
+### `division_active_color`
+
+The [color](https://flet.dev/docs/guides/python/colors/) to use for the division shapes displayed on the slider track that is active.
+
+The default value is `ft.colors.OUTLINE`.
+
+### `division_inactive_color`
+
+The [color](https://flet.dev/docs/guides/python/colors/) to use for the division shapes displayed on the slider track that is inactive.
+
+The default value is `ft.colors.PRIMARY_CONTAINER`.
+
+### `thumb_radius`
+
+Thumb radius in virtual pixels. 
+
+The default value is `10`.
+
+
+### `thumb_color`
+
+The color of the thumb.
+
+The default value is `ft.colors.PRIMARY`.
+
+### `value`
+
+The currently selected value for this slider.
+
+The slider's thumb is drawn at a position that corresponds to this value.
+
+### `min`
+
+The minimum value the user can select.
+
+Defaults to `0.0`. Must be less than or equal to max.
+
+If the max is equal to the min, then the slider is disabled.
+
+### `max`
+
+The maximum value the user can select.
+
+Defaults to `1.0`. Must be greater than or equal to min.
+
+If the max is equal to the min, then the slider is disabled.
