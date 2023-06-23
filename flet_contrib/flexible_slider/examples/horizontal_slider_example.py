@@ -1,6 +1,6 @@
 import flet as ft
 
-from flet_contrib.vertical_slider import FlexibleSlider
+from flet_contrib.flexible_slider import FlexibleSlider
 
 
 def main(page: ft.Page):
@@ -12,10 +12,11 @@ def main(page: ft.Page):
         min=100,
         max=600,
         value=500,
+        thickness=10,
         selected_track_color=ft.colors.BLUE_500,
         track_color=ft.colors.YELLOW_300,
         thumb_color=ft.colors.GREEN,
-        thumb_radius=5,
+        thumb_radius=15,
         on_change=horizontal_slider_changed,
     )
 

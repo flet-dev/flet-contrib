@@ -1,6 +1,6 @@
 # VerticalSlider
 
-`VerticalSplitter` control is used for building layout with left and right panes divided by a vertical line that can be dragged in the left and/or right direction.
+`FlexibleSlider` can be configured to be horizontal or vertical.
 
 `VerticalSplitter` inherits from [`Row`](https://flet.dev/docs/controls/row).
 

@@ -1,6 +1,6 @@
 import flet as ft
 
-from flet_contrib.vertical_slider import FlexibleSlider
+from flet_contrib.flexible_slider import FlexibleSlider
 
 
 def main(page: ft.Page):
