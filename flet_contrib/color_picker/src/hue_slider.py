@@ -1,5 +1,8 @@
-import flet as ft
 import colorsys
+
+import flet as ft
+from flet_core.utils import is_asyncio, is_coroutine
+
 from .utils import *
 
 SLIDER_WIDTH = 180
@@ -14,8 +17,10 @@ class HueSlider(ft.GestureDetector):
         self.content = ft.Stack(height=CIRCLE_SIZE, width=SLIDER_WIDTH)
         self.generate_slider()
         self.on_change_hue = on_change_hue
-        self.on_pan_start = self.start_drag
-        self.on_pan_update = self.drag
+        self.on_pan_start = self.drag_start_async if is_asyncio() else self.drag_start
+        self.on_pan_update = (
+            self.drag_update_async if is_asyncio() else self.drag_update
+        )
 
     # hue
     @property
@@ -37,18 +42,35 @@ class HueSlider(ft.GestureDetector):
         self.thumb.left = self.__hue * self.track.width
         self.thumb.bgcolor = rgb2hex(colorsys.hsv_to_rgb(self.__hue, 1, 1))
 
-    def update_selected_hue(self, x):
+    def __update_selected_hue(self, x):
         self.__hue = max(0, min((x - CIRCLE_SIZE / 2) / self.track.width, 1))
         self.thumb.left = self.__hue * self.track.width
         self.thumb.bgcolor = rgb2hex(colorsys.hsv_to_rgb(self.__hue, 1, 1))
+
+    def update_selected_hue(self, x):
+        self.__update_selected_hue(x)
         self.thumb.update()
         self.on_change_hue()
 
-    def start_drag(self, e: ft.DragStartEvent):
+    async def update_selected_hue_async(self, x):
+        self.__update_selected_hue(x)
+        await self.thumb.update_async()
+        if is_coroutine(self.on_change_hue):
+            await self.on_change_hue()
+        else:
+            self.on_change_hue()
+
+    def drag_start(self, e: ft.DragStartEvent):
         self.update_selected_hue(x=e.local_x)
 
-    def drag(self, e: ft.DragUpdateEvent):
+    async def drag_start_async(self, e: ft.DragStartEvent):
+        await self.update_selected_hue_async(x=e.local_x)
+
+    def drag_update(self, e: ft.DragUpdateEvent):
         self.update_selected_hue(x=e.local_x)
+
+    async def drag_update_async(self, e: ft.DragUpdateEvent):
+        await self.update_selected_hue_async(x=e.local_x)
 
     def generate_gradient_colors(self):
         colors = []
