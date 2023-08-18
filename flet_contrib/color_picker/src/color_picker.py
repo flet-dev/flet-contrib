@@ -1,5 +1,8 @@
-import flet as ft
 import colorsys
+
+import flet as ft
+from flet_core.utils import is_asyncio
+
 from .hue_slider import HueSlider
 from .utils import *
 
@@ -14,7 +17,9 @@ class ColorPicker(ft.Column):
         self.width = width
         self.__color = color
         self.hue_slider = HueSlider(
-            on_change_hue=self.update_color_picker_on_hue_change,
+            on_change_hue=self.update_color_picker_on_hue_change_async
+            if is_asyncio()
+            else self.update_color_picker_on_hue_change,
             hue=hex2hsv(self.color)[0],
         )
         self.generate_color_map()
@@ -56,14 +61,25 @@ class ColorPicker(ft.Column):
             self.color = e.control.value
             self.update()
 
-        def on_rgb_submit(e):
+        async def on_hex_submit_async(e):
+            self.color = e.control.value
+            await self.update_async()
+
+        def __on_rgb_submit():
             rgb = (
                 int(self.r.value) / 255,
                 int(self.g.value) / 255,
                 int(self.b.value) / 255,
             )
             self.color = rgb2hex(rgb)
+
+        def on_rgb_submit(e):
+            __on_rgb_submit()
             self.update()
+
+        async def on_rgb_submit_async(e):
+            __on_rgb_submit()
+            await self.update_async()
 
         self.hex = ft.TextField(
             label="Hex",
@@ -71,8 +87,8 @@ class ColorPicker(ft.Column):
             value=self.__color,
             height=40,
             width=90,
-            on_submit=on_hex_submit,
-            on_blur=on_hex_submit,
+            on_submit=on_hex_submit_async if is_asyncio() else on_hex_submit,
+            on_blur=on_hex_submit_async if is_asyncio() else on_hex_submit,
         )
         self.r = ft.TextField(
             label="R",
@@ -80,8 +96,8 @@ class ColorPicker(ft.Column):
             width=55,
             value=rgb[0],
             text_size=12,
-            on_submit=on_rgb_submit,
-            on_blur=on_rgb_submit,
+            on_submit=on_rgb_submit_async if is_asyncio() else on_rgb_submit,
+            on_blur=on_rgb_submit_async if is_asyncio() else on_rgb_submit,
         )
         self.g = ft.TextField(
             label="G",
@@ -89,8 +105,8 @@ class ColorPicker(ft.Column):
             width=55,
             value=rgb[1],
             text_size=12,
-            on_submit=on_rgb_submit,
-            on_blur=on_rgb_submit,
+            on_submit=on_rgb_submit_async if is_asyncio() else on_rgb_submit,
+            on_blur=on_rgb_submit_async if is_asyncio() else on_rgb_submit,
         )
         self.b = ft.TextField(
             label="B",
@@ -98,8 +114,8 @@ class ColorPicker(ft.Column):
             width=55,
             value=rgb[2],
             text_size=12,
-            on_submit=on_rgb_submit,
-            on_blur=on_rgb_submit,
+            on_submit=on_rgb_submit_async if is_asyncio() else on_rgb_submit,
+            on_blur=on_rgb_submit_async if is_asyncio() else on_rgb_submit,
         )
         self.selected_color_view = ft.Column(
             spacing=20,
@@ -139,7 +155,7 @@ class ColorPicker(ft.Column):
         self.thumb.bgcolor = self.color  # Color matrix circle
 
     def generate_color_map(self):
-        def move_circle(x, y):
+        def __move_circle(x, y):
             self.thumb.top = max(
                 0,
                 min(
@@ -155,24 +171,25 @@ class ColorPicker(ft.Column):
                 ),
             )
             self.find_color(x=self.thumb.left, y=self.thumb.top)
-
             self.update_selected_color_view_values()
+
+        def on_pan_update(e: ft.DragStartEvent):
+            __move_circle(x=e.local_x, y=e.local_y)
             self.selected_color_view.update()
             self.thumb.update()
 
-        def on_pan_start(e: ft.DragStartEvent):
-            move_circle(x=e.local_x, y=e.local_y)
-
-        def on_pan_update(e: ft.DragUpdateEvent):
-            move_circle(x=e.local_x, y=e.local_y)
+        async def on_pan_update_async(e: ft.DragStartEvent):
+            __move_circle(x=e.local_x, y=e.local_y)
+            await self.selected_color_view.update_async()
+            await self.thumb.update_async()
 
         self.color_map_container = ft.GestureDetector(
             content=ft.Stack(
                 width=self.width,
                 height=int(self.width * 3 / 5),
             ),
-            on_pan_start=on_pan_start,
-            on_pan_update=on_pan_update,
+            on_pan_start=on_pan_update_async if is_asyncio() else on_pan_update,
+            on_pan_update=on_pan_update_async if is_asyncio() else on_pan_update,
         )
 
         saturation_container = ft.Container(
@@ -230,3 +247,9 @@ class ColorPicker(ft.Column):
         self.update_selected_color_view_values()
         self.selected_color_view.update()
         self.color_map_container.update()
+
+    async def update_color_picker_on_hue_change_async(self):
+        self.update_color_map()
+        self.update_selected_color_view_values()
+        await self.selected_color_view.update_async()
+        await self.color_map_container.update_async()
