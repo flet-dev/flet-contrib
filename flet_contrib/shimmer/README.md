@@ -66,7 +66,6 @@ ft.app(target=main)
 ```
 
 ## Output of above code
-<video src="media/shimmer_common_async.mp4" width="320" height="640" autoplay></video>
-
+https://github.com/lekshmanmj/flet-contrib/assets/35882740/9226586f-2c46-4483-8ba1-d29fe5ec427b
 
 
