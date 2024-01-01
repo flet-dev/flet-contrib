@@ -1,4 +1,4 @@
-# Shimmer
+# Shimmer Loading Effect
 `Shimmer` control is used to create shimmer loading effect.
 
 Also this control has the ability to auto generate dummy boxes that appears in the shimmer effect. To achieve it we have pass `auto_generate = True` to Shimmer and set `data = 'shimmer_load` to all those controls for which we want to create dummy boxes. 
@@ -66,7 +66,7 @@ ft.app(target=main)
 ```
 
 ## Output of above code
-<video src="media/shimmer_common_async.mp4"></video>
+<video src="media/shimmer_common_async.mp4" width="320" height="640" autoplay></video>
 
 
 
