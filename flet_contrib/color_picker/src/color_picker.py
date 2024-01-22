@@ -41,7 +41,7 @@ class ColorPicker(ft.Column):
         self.update_circle_position()
         self.update_color_map()
         self.update_selected_color_view_values()
-        print("ON UPDATE")
+        
 
     def update_circle_position(self):
         hsv_color = hex2hsv(self.color)
