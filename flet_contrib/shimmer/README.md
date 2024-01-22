@@ -4,7 +4,8 @@
 Also this control has the ability to auto generate dummy boxes that appears in the shimmer effect. To achieve it we have pass `auto_generate = True` to Shimmer and set `data = 'shimmer_load` to all those controls for which we want to create dummy boxes. 
 
 This control can create shimmer effect either individually for one control or commonly for whole page.
-Default `full = True` - common shimmer effect, Make it `False` for individual effect
+
+This control can also be assigned to `page.splash`.
 
 This control also accept custom dummy boxes. We just need to pass a custom created dummy box to `control` parameter and set `auto_generate = False`
 
@@ -25,40 +26,36 @@ async def main(page: ft.Page):
 
     holder = ft.Container()
     await page.add_async(holder)
-    lt = ft.ListTile()
-    lt.leading = ft.Icon(ft.icons.ALBUM, data = 'shimmer_load') # data = 'shimmer_load' inform the Shimmer class to create dummy for this control
-    lt.title = ft.Text("The Enchanted Nightingale", data = 'shimmer_load')
-    lt.subtitle = ft.Text("Music by Julie Gable. Lyrics by Sidney Stein.", data = 'shimmer_load')
-    
-    row = ft.Row()
-    row.alignment = ft.MainAxisAlignment.END
-    row.controls.append(ft.TextButton("Buy tickets", data = 'shimmer_load'))
-    row.controls.append(ft.TextButton("Listen", data = 'shimmer_load'))
-    
-    column = ft.Column()
-    column.controls = [lt, row]
-    
-    container = ft.Container()
-    container.content = column
-    container.height = 130
-    container.width = 400
-    container.padding = 10
-    
-    card = ft.Card()
-    card.content = container
-
+    lt = ft.ListTile(
+        leading = ft.Icon(ft.icons.ALBUM, data = 'shimmer_load'), # data = 'shimmer_load' inform the Shimmer class to create dummy for this control
+        title = ft.Text("The Enchanted Nightingale", data = 'shimmer_load'),
+        subtitle = ft.Text("Music by Julie Gable. Lyrics by Sidney Stein.", data = 'shimmer_load')
+    )
+    row = ft.Row(
+        alignment = ft.MainAxisAlignment.END,
+        controls= [
+            ft.TextButton("Buy tickets", data = 'shimmer_load'),
+            ft.TextButton("Listen", data = 'shimmer_load')
+        ]
+    )
+    column = ft.Column(
+        controls = [lt, row]
+    )
+    container = ft.Container(
+        content = column,
+        height = 130,
+        width = 400,
+        padding = 10
+    )
+    card = ft.Card(
+        content = container
+    )
     ctrl = ft.Column([card for i in range(5)])
 
     dummy = Shimmer(control=ctrl, auto_generate= True) # passing ctrl to Shimmer
-    holder.content = dummy
+    holder.content = dummy # can also use page.splash in place of holder
     await holder.update_async()
-
-    dummy.start_async() # start effect
-
     await asyncio.sleep(3) # assume this to be any data fetching task 
-    
-    dummy.stop_async() # stop effect
-
     holder.content = ctrl
     await holder.update_async()
 

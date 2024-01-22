@@ -6,12 +6,13 @@ from flet_contrib.shimmer import Shimmer
 async def main(page: ft.Page):
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    page.theme_mode = ft.ThemeMode.LIGHT
 
     holder = ft.Container()
     await page.add_async(holder)
     lt = ft.ListTile(
-        leading=ft.Icon(ft.icons.ALBUM, data="shimmer_load"),
+        leading=ft.Icon(
+            ft.icons.ALBUM, data="shimmer_load"
+        ),  # data = 'shimmer_load' inform the Shimmer class to create dummy for this control
         title=ft.Text("The Enchanted Nightingale", data="shimmer_load"),
         subtitle=ft.Text(
             "Music by Julie Gable. Lyrics by Sidney Stein.", data="shimmer_load"
@@ -26,25 +27,14 @@ async def main(page: ft.Page):
     )
     column = ft.Column(controls=[lt, row])
     container = ft.Container(content=column, height=130, width=400, padding=10)
-    ctrl = ft.Card(content=container)
+    card = ft.Card(content=container)
+    ctrl = ft.Column([card for i in range(5)])
 
-    temp = []
-    for i in range(5):  # individual mode shimmer effect
-        temp.append(
-            Shimmer(
-                ref=ft.Ref[ft.ShaderMask](),
-                control=ctrl,
-                height=ctrl.height,
-                width=ctrl.width,
-                auto_generate=True,
-            )
-        )
-    holder.content = ft.Column(temp)
+    dummy = Shimmer(control=ctrl, auto_generate=True)  # passing ctrl to Shimmer
+    holder.content = dummy  # can also use page.splash in place of holder
     await holder.update_async()
-
-    await asyncio.sleep(6)  # assume this to be some data fetching task
-
-    holder.content = ft.Column([ctrl for each in range(5)])
+    await asyncio.sleep(3)  # assume this to be any data fetching task
+    holder.content = ctrl
     await holder.update_async()
 
 

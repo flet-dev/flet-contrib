@@ -1,15 +1,15 @@
-import asyncio
+import time
 import flet as ft
 from flet_contrib.shimmer import Shimmer
 
 
-async def main(page: ft.Page):
+def main(page: ft.Page):
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.theme_mode = ft.ThemeMode.LIGHT
 
     holder = ft.Container()
-    await page.add_async(holder)
+    page.add(holder)
     lt = ft.ListTile(
         leading=ft.Icon(ft.icons.ALBUM, data="shimmer_load"),
         title=ft.Text("The Enchanted Nightingale", data="shimmer_load"),
@@ -27,25 +27,13 @@ async def main(page: ft.Page):
     column = ft.Column(controls=[lt, row])
     container = ft.Container(content=column, height=130, width=400, padding=10)
     ctrl = ft.Card(content=container)
+    dummy = Shimmer(control=ctrl, auto_generate=True)
 
-    temp = []
-    for i in range(5):  # individual mode shimmer effect
-        temp.append(
-            Shimmer(
-                ref=ft.Ref[ft.ShaderMask](),
-                control=ctrl,
-                height=ctrl.height,
-                width=ctrl.width,
-                auto_generate=True,
-            )
-        )
-    holder.content = ft.Column(temp)
-    await holder.update_async()
-
-    await asyncio.sleep(6)  # assume this to be some data fetching task
-
-    holder.content = ft.Column([ctrl for each in range(5)])
-    await holder.update_async()
+    holder.content = dummy
+    holder.update()
+    time.sleep(6)
+    holder.content = ctrl
+    holder.update()
 
 
 ft.app(target=main)
