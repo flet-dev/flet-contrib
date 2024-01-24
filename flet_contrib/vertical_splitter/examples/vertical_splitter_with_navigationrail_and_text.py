@@ -1,6 +1,6 @@
 import flet as ft
 
-from flet_contrib.vertical_splitter import VerticalSplitter, FixedPane
+from flet_contrib.vertical_splitter import FixedPane, VerticalSplitter
 
 
 def main(page: ft.Page):

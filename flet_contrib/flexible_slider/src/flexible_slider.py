@@ -1,7 +1,5 @@
-from enum import Enum
-from typing import Optional
-import flet as ft
-import flet.canvas as cv
+import flet_core as ft
+import flet_core.canvas as cv
 
 
 class FlexibleSlider(ft.GestureDetector):

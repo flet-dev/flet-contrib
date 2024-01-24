@@ -1,5 +1,8 @@
-import flet as ft
-import time, asyncio, threading
+import asyncio
+import threading
+import time
+
+import flet_core as ft
 
 
 class Shimmer(ft.UserControl):
@@ -87,8 +90,8 @@ class Shimmer(ft.UserControl):
                 self.i += 0.02
                 if self.i >= 1.1:
                     self.i = -0.1
-                    time.sleep(0.4)
-                time.sleep(0.01)
+                    await asyncio.sleep(0.4)
+                await asyncio.sleep(0.01)
         except:
             pass
 
