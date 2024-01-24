@@ -1,5 +1,5 @@
 # from color_picker import CustomColorPicker
-import flet as ft
+import flet_core as ft
 
 
 class ColorSwatch:

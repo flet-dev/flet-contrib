@@ -9,10 +9,11 @@ packages = [{include = "flet_contrib"}]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-flet = "^0"
+flet-core = "^0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
+flet = "^0"
 
 [build-system]
 requires = ["poetry-core"]

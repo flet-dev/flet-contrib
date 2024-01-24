@@ -1,6 +1,6 @@
 import colorsys
 
-import flet as ft
+import flet_core as ft
 from flet_core.utils import is_asyncio
 
 from .hue_slider import HueSlider
@@ -41,7 +41,6 @@ class ColorPicker(ft.Column):
         self.update_circle_position()
         self.update_color_map()
         self.update_selected_color_view_values()
-        
 
     def update_circle_position(self):
         hsv_color = hex2hsv(self.color)
