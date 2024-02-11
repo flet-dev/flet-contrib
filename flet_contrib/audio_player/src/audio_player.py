@@ -1,7 +1,7 @@
 import os
 from datetime import timedelta
 
-import flet as ft
+import flet_core as ft
 from flet import CrossAxisAlignment, MainAxisAlignment
 
 from .utils import format_timedelta_str_ms
