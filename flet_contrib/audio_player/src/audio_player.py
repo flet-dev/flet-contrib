@@ -2,7 +2,6 @@ import os
 from datetime import timedelta
 
 import flet_core as ft
-from flet import CrossAxisAlignment, MainAxisAlignment
 
 from .utils import format_timedelta_str_ms
 
@@ -17,8 +16,8 @@ class AudioPlayer(ft.Container):
         src: str | None = None,
         curr_idx: int = 0,
         font_family: str | None = None,
-        controls_vertical_alignment: MainAxisAlignment = MainAxisAlignment.NONE,
-        controls_horizontal_alignment: CrossAxisAlignment = CrossAxisAlignment.NONE,
+        controls_vertical_alignment: ft.MainAxisAlignment = ft.MainAxisAlignment.NONE,
+        controls_horizontal_alignment: ft.CrossAxisAlignment = ft.CrossAxisAlignment.NONE,
         *args,
         **kwargs,
     ):
