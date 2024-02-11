@@ -211,7 +211,7 @@ class AudioPlayer(ft.Container):
 
     # updating the progressbar and times_row
     def _update_controls(self, e):
-        if e.data == '0':  # completed
+        if e.data == "0":  # completed
             self.play_pause_btn.icon = ft.icons.PLAY_ARROW
             self.playing = False
             self.page_.update()
