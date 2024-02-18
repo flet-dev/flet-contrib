@@ -14,6 +14,8 @@ When height and width for shimmer effect is not given, Shimmer takes the size of
 Use params `color1` and `color2` to create dual color shimmer effect.
 Use param `color` to create effect with variants of same root color.
 
+By default `shine = True`, you may set it `False` if you don't need shine effect. 
+
 ## Example - Async, Common effect
 
 ```python

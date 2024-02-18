@@ -16,6 +16,7 @@ class Shimmer(ft.UserControl):
         height=None,
         width=None,
         auto_generate: bool = False,
+        shine: bool = True
     ) -> None:
         super().__init__()
 
@@ -24,6 +25,7 @@ class Shimmer(ft.UserControl):
         self.color2 = color2
         self.height = height
         self.width = width
+        self.shine = shine
 
         if ref is None:
             self.ref = ft.Ref[ft.ShaderMask]()
@@ -300,16 +302,20 @@ class Shimmer(ft.UserControl):
         return ft.Container(ft.Stack([dummy]), bgcolor=self.__color1)
 
     async def did_mount_async(self):
-        self.start_async()
+        if self.shine:
+            self.start_async()
 
     async def will_unmount_async(self):
-        self.stop_async()
+        if self.shine:
+            self.stop_async()
 
     def did_mount(self):
-        self.start()
+        if self.shine:
+            self.start()
 
     def will_unmount(self):
-        self.stop()
+        if self.shine:
+            self.stop()
 
     def start_async(self):
         self.task = asyncio.ensure_future(self.shine_async())
