@@ -5,7 +5,7 @@ import time
 import flet_core as ft
 
 
-class Shimmer(ft.UserControl):
+class Shimmer(ft.Container):
     def __init__(
         self,
         ref=None,
@@ -70,7 +70,8 @@ class Shimmer(ft.UserControl):
             shader=gradient,
         )
 
-        return ft.Container(content=self.__shadermask, bgcolor=self.__color1)
+        self.content = self.__shadermask
+        self.bgcolor = self.__color1
 
     async def shine_async(self):
         try:
@@ -86,7 +87,7 @@ class Shimmer(ft.UserControl):
                     end=ft.alignment.bottom_right,
                 )
                 self.ref.current.shader = gradient
-                await self.ref.current.update_async()
+                self.ref.current.update()
                 self.i += 0.02
                 if self.i >= 1.1:
                     self.i = -0.1
@@ -94,30 +95,6 @@ class Shimmer(ft.UserControl):
                 await asyncio.sleep(0.01)
         except:
             pass
-
-    def shine(self):
-        try:
-            while self.i <= 5 and not self.__stop_shine:
-                gradient = ft.LinearGradient(
-                    colors=[self.__color2, self.__color1, self.__color2],
-                    stops=[
-                        0 + self.i - self.gap,
-                        self.i,
-                        self.gap + self.i,
-                    ],
-                    begin=ft.alignment.top_left,
-                    end=ft.alignment.bottom_right,
-                )
-                self.ref.current.shader = gradient
-                self.ref.current.update()
-                self.i += 0.01
-                if self.i >= 1.1:
-                    self.i = -0.1
-                    time.sleep(0.4)
-
-                time.sleep(0.01)
-        except:
-            pass  # print('Gently stopped shimmer shine loop')
 
     def create_dummy(self, target=None):
         opacity = 0.1
@@ -299,28 +276,9 @@ class Shimmer(ft.UserControl):
             dummy.bgcolor = ft.colors.with_opacity(opacity, color)
         return ft.Container(ft.Stack([dummy]), bgcolor=self.__color1)
 
-    async def did_mount_async(self):
-        self.start_async()
-
-    async def will_unmount_async(self):
-        self.stop_async()
-
     def did_mount(self):
-        self.start()
+        self.task = self.page.run_task(self.shine_async)
 
     def will_unmount(self):
-        self.stop()
-
-    def start_async(self):
-        self.task = asyncio.ensure_future(self.shine_async())
-
-    def start(self):
-        self.__stop_shine = False
-        self.__thread = threading.Thread(target=self.shine)
-        self.__thread.start()
-
-    def stop_async(self):
         self.task.cancel()
-
-    def stop(self):
-        self.__stop_shine = True
+        

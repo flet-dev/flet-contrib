@@ -9,7 +9,7 @@ async def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.LIGHT
 
     holder = ft.Container()
-    await page.add_async(holder)
+    page.add(holder)
     lt = ft.ListTile(
         leading=ft.Icon(ft.icons.ALBUM, data="shimmer_load"),
         title=ft.Text("The Enchanted Nightingale", data="shimmer_load"),
@@ -40,12 +40,12 @@ async def main(page: ft.Page):
             )
         )
     holder.content = ft.Column(temp)
-    await holder.update_async()
+    holder.update()
 
     await asyncio.sleep(6)  # assume this to be some data fetching task
 
     holder.content = ft.Column([ctrl for each in range(5)])
-    await holder.update_async()
+    holder.update()
 
 
 ft.app(target=main)
