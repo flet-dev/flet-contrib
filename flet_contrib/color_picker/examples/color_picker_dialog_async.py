@@ -4,9 +4,9 @@ from flet_contrib.color_picker import ColorPicker
 
 
 async def main(page: ft.Page):
-    async def open_color_picker(e):
+    def open_color_picker(e):
         d.open = True
-        await page.update_async()
+        page.update()
 
     color_picker = ColorPicker(color="#c8df6f", width=300)
     color_icon = ft.IconButton(icon=ft.icons.BRUSH, on_click=open_color_picker)
@@ -14,11 +14,11 @@ async def main(page: ft.Page):
     async def change_color(e):
         color_icon.icon_color = color_picker.color
         d.open = False
-        await page.update_async()
+        page.update()
 
     async def close_dialog(e):
         d.open = False
-        await d.update_async()
+        d.update()
 
     d = ft.AlertDialog(
         content=color_picker,
@@ -30,8 +30,7 @@ async def main(page: ft.Page):
         on_dismiss=change_color,
     )
     page.dialog = d
-
-    await page.add_async(color_icon)
+    page.add(color_icon)
 
 
 ft.app(main)

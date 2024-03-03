@@ -1,5 +1,5 @@
 # from color_picker import CustomColorPicker
-import flet_core as ft
+import flet as ft
 
 
 class ColorSwatch:
@@ -127,4 +127,4 @@ def main(page: ft.Page):
     page.add(text_icon)
 
 
-ft.app(target=main)
+ft.app(main)
