@@ -1,8 +1,7 @@
 import os
 from datetime import timedelta
 
-import flet as ft
-from flet import CrossAxisAlignment, MainAxisAlignment
+import flet_core as ft
 
 from .utils import format_timedelta_str_ms
 
@@ -17,8 +16,8 @@ class AudioPlayer(ft.Container):
         src: str | None = None,
         curr_idx: int = 0,
         font_family: str | None = None,
-        controls_vertical_alignment: MainAxisAlignment = MainAxisAlignment.NONE,
-        controls_horizontal_alignment: CrossAxisAlignment = CrossAxisAlignment.NONE,
+        controls_vertical_alignment: ft.MainAxisAlignment = ft.MainAxisAlignment.NONE,
+        controls_horizontal_alignment: ft.CrossAxisAlignment = ft.CrossAxisAlignment.NONE,
         *args,
         **kwargs,
     ):
@@ -211,6 +210,11 @@ class AudioPlayer(ft.Container):
 
     # updating the progressbar and times_row
     def _update_controls(self, e):
+        if e.data == "0":  # completed
+            self.play_pause_btn.icon = ft.icons.PLAY_ARROW
+            self.playing = False
+            self.page_.update()
+            return
         curr_time = int(e.data)  # the elapsed time
         try:
             self.seek_bar.value = curr_time / self.duration
