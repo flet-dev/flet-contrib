@@ -3,7 +3,7 @@ import flet as ft
 from flet_contrib.flexible_slider import FlexibleSlider
 
 
-def main(page: ft.Page):
+async def main(page: ft.Page):
     def vertical_slider_changed():
         print(vertical_slider.value)
 

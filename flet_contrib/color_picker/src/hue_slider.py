@@ -1,7 +1,6 @@
 import colorsys
 
 import flet_core as ft
-from flet_core.utils import is_asyncio, is_coroutine
 
 from .utils import *
 
@@ -17,10 +16,8 @@ class HueSlider(ft.GestureDetector):
         self.content = ft.Stack(height=CIRCLE_SIZE, width=SLIDER_WIDTH)
         self.generate_slider()
         self.on_change_hue = on_change_hue
-        self.on_pan_start = self.drag_start_async if is_asyncio() else self.drag_start
-        self.on_pan_update = (
-            self.drag_update_async if is_asyncio() else self.drag_update
-        )
+        self.on_pan_start = self.drag_start
+        self.on_pan_update = self.drag_update
 
     # hue
     @property
@@ -52,25 +49,11 @@ class HueSlider(ft.GestureDetector):
         self.thumb.update()
         self.on_change_hue()
 
-    async def update_selected_hue_async(self, x):
-        self.__update_selected_hue(x)
-        await self.thumb.update_async()
-        if is_coroutine(self.on_change_hue):
-            await self.on_change_hue()
-        else:
-            self.on_change_hue()
-
     def drag_start(self, e: ft.DragStartEvent):
         self.update_selected_hue(x=e.local_x)
 
-    async def drag_start_async(self, e: ft.DragStartEvent):
-        await self.update_selected_hue_async(x=e.local_x)
-
     def drag_update(self, e: ft.DragUpdateEvent):
         self.update_selected_hue(x=e.local_x)
-
-    async def drag_update_async(self, e: ft.DragUpdateEvent):
-        await self.update_selected_hue_async(x=e.local_x)
 
     def generate_gradient_colors(self):
         colors = []

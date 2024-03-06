@@ -8,7 +8,7 @@ async def main(page: ft.Page):
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
 
     holder = ft.Container()
-    await page.add_async(holder)
+    page.add(holder)
     lt = ft.ListTile(
         leading=ft.Icon(
             ft.icons.ALBUM, data="shimmer_load"
@@ -32,10 +32,10 @@ async def main(page: ft.Page):
 
     dummy = Shimmer(control=ctrl, auto_generate=True)  # passing ctrl to Shimmer
     holder.content = dummy  # can also use page.splash in place of holder
-    await holder.update_async()
+    holder.update()
     await asyncio.sleep(3)  # assume this to be any data fetching task
     holder.content = ctrl
-    await holder.update_async()
+    holder.update()
 
 
 ft.app(target=main)
