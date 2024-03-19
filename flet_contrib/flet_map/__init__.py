@@ -1,0 +1,1 @@
+from flet_contrib.flet_map.src.flet_map import FletMap

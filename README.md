@@ -40,6 +40,9 @@ Control directory structure:
 
 See [ColorPicker](flet_contrib/color_picker) for folder structure example.
 
+See [FletMap](flet_contrib/flet_map) for folder structure example.
+![FletMapScreenShot](./flet_contrib/flet_map/assets/screen_shot.png)
+
 Submit Pull Request (PR) with your changes.
 
 Once your PR is merged into `main` a new "dev" package will be released [here](https://pypi.org/project/flet-contrib/) which can be installed with `pip install flet-contrib --pre`.
