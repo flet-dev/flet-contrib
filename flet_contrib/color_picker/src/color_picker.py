@@ -1,6 +1,6 @@
 import colorsys
 
-import flet_core as ft
+import flet as ft
 
 from .hue_slider import HueSlider
 from .utils import *
@@ -179,7 +179,7 @@ class ColorPicker(ft.Column):
             gradient=ft.LinearGradient(
                 begin=ft.alignment.center_left,
                 end=ft.alignment.center_right,
-                colors=[ft.colors.WHITE, ft.colors.RED],
+                colors=[ft.Colors.WHITE, ft.Colors.RED],
             ),
             width=self.color_map_container.content.width - CIRCLE_SIZE,
             height=self.color_map_container.content.height - CIRCLE_SIZE,
@@ -194,7 +194,7 @@ class ColorPicker(ft.Column):
             shader=ft.LinearGradient(
                 begin=ft.alignment.top_center,
                 end=ft.alignment.bottom_center,
-                colors=[ft.colors.WHITE, ft.colors.BLACK],
+                colors=[ft.Colors.WHITE, ft.Colors.BLACK],
             ),
             border_radius=5,
             width=saturation_container.width,

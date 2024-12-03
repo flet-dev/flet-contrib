@@ -9,7 +9,7 @@ packages = [{include = "flet_contrib"}]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-flet-core = "^0"
+flet = "^0"
 # flet-core = { path = "../flet/sdk/python/packages/flet-core", develop = true }
 
 [tool.poetry.group.dev.dependencies]

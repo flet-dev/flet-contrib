@@ -13,13 +13,13 @@ def main(page: ft.Page):
         value=250,
         thickness=10,
         length=200,
-        active_color=ft.colors.BLUE_500,
-        inactive_color=ft.colors.YELLOW_300,
-        thumb_color=ft.colors.GREEN,
+        active_color=ft.Colors.BLUE_500,
+        inactive_color=ft.Colors.YELLOW_300,
+        thumb_color=ft.Colors.GREEN,
         thumb_radius=20,
         on_change=horizontal_slider_changed,
     )
-    # horizontal_slider.content.bgcolor = ft.colors.AMBER
+    # horizontal_slider.content.bgcolor = ft.Colors.AMBER
     page.add(
         horizontal_slider,
     )

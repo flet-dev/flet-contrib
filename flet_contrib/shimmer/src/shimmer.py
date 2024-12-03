@@ -2,7 +2,7 @@ import asyncio
 import threading
 import time
 
-import flet_core as ft
+import flet as ft
 
 
 class Shimmer(ft.Container):
@@ -31,14 +31,14 @@ class Shimmer(ft.Container):
             self.ref = ref
 
         if self.color1 is None and self.color2 is None and self.color is None:
-            self.__color1 = ft.colors.BACKGROUND
-            self.__color2 = ft.colors.with_opacity(0.5, ft.colors.BACKGROUND)
+            self.__color1 = ft.Colors.BACKGROUND
+            self.__color2 = ft.Colors.with_opacity(0.5, ft.Colors.BACKGROUND)
         elif self.color is not None:
             self.__color1 = self.color
-            self.__color2 = ft.colors.with_opacity(0.5, self.color)
+            self.__color2 = ft.Colors.with_opacity(0.5, self.color)
         elif self.color1 is not None and self.color2 is not None:
             self.__color1 = self.color1
-            self.__color2 = ft.colors.with_opacity(0.5, self.color2)
+            self.__color2 = ft.Colors.with_opacity(0.5, self.color2)
         if auto_generate:
             self.control = self.create_dummy(control)
         else:
@@ -98,18 +98,18 @@ class Shimmer(ft.Container):
 
     def create_dummy(self, target=None):
         opacity = 0.1
-        color = ft.colors.ON_PRIMARY_CONTAINER
+        color = ft.Colors.ON_PRIMARY_CONTAINER
         circle = lambda size=60: ft.Container(
             height=size,
             width=size,
-            bgcolor=ft.colors.with_opacity(opacity, color),
+            bgcolor=ft.Colors.with_opacity(opacity, color),
             border_radius=size,
         )
         rectangle = lambda height, content=None: ft.Container(
             content=content,
             height=height,
             width=height * 2.5,
-            bgcolor=ft.colors.with_opacity(opacity, color),
+            bgcolor=ft.Colors.with_opacity(opacity, color),
             border_radius=20,
             alignment=ft.alignment.bottom_center,
             padding=20,
@@ -117,7 +117,7 @@ class Shimmer(ft.Container):
         tube = lambda width: ft.Container(
             height=10,
             width=width,
-            bgcolor=ft.colors.with_opacity(opacity, color),
+            bgcolor=ft.Colors.with_opacity(opacity, color),
             border_radius=20,
             expand=0,
         )
@@ -145,7 +145,7 @@ class Shimmer(ft.Container):
             dummy = circle(30)
         elif ctrl_name in ["image"] and target.data == "shimmer_load":
             dummy = ft.Container(
-                bgcolor=ft.colors.with_opacity(opacity, color), expand=True
+                bgcolor=ft.Colors.with_opacity(opacity, color), expand=True
             )
         elif ctrl_name in ["image"]:
             dummy = ft.Container(expand=True)
@@ -231,9 +231,11 @@ class Shimmer(ft.Container):
                     dummy.rows = [
                         ft.DataRow(
                             [
-                                ft.DataCell(tube(100))
-                                if each_col.content.data == "shimmer_load"
-                                else ft.DataCell(ft.Text())
+                                (
+                                    ft.DataCell(tube(100))
+                                    if each_col.content.data == "shimmer_load"
+                                    else ft.DataCell(ft.Text())
+                                )
                                 for each_col in each_control.cells
                             ]
                         )
@@ -241,9 +243,11 @@ class Shimmer(ft.Container):
                     ]
                 elif pos == "columns":
                     dummy.columns = [
-                        ft.DataColumn(tube(100))
-                        if each_control.label.data == "shimmer_load"
-                        else ft.DataColumn(ft.Text())
+                        (
+                            ft.DataColumn(tube(100))
+                            if each_control.label.data == "shimmer_load"
+                            else ft.DataColumn(ft.Text())
+                        )
                         for each_control in target.__dict__[each_pos]
                     ]
 
@@ -273,7 +277,7 @@ class Shimmer(ft.Container):
                 dummy.controls = temp
 
         if target.data == "shimmer_load":
-            dummy.bgcolor = ft.colors.with_opacity(opacity, color)
+            dummy.bgcolor = ft.Colors.with_opacity(opacity, color)
         return ft.Container(ft.Stack([dummy]), bgcolor=self.__color1)
 
     def did_mount(self):
@@ -281,4 +285,3 @@ class Shimmer(ft.Container):
 
     def will_unmount(self):
         self.task.cancel()
-        

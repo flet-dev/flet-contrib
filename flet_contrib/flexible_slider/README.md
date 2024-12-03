@@ -63,7 +63,7 @@ The [color](https://flet.dev/docs/guides/python/colors/) to use for the portion 
 
 The "active" side of the slider is the side between the thumb and the minimum value.
 
-The default value is `ft.colors.PRIMARY`.
+The default value is `ft.Colors.PRIMARY`.
 
 ### `inactive_color`
 
@@ -71,7 +71,7 @@ The [color](https://flet.dev/docs/guides/python/colors/) for the inactive portio
 
 The "inactive" side of the slider is the side between the thumb and the maximum value.
 
-The default value is `ft.colors.OUTLINE_VARIANT`.
+The default value is `ft.Colors.OUTLINE_VARIANT`.
 
 ### `divisions`
 
@@ -83,13 +83,13 @@ If not set, the slider is continuous.
 
 The [color](https://flet.dev/docs/guides/python/colors/) to use for the division shapes displayed on the slider track that is active.
 
-The default value is `ft.colors.OUTLINE`.
+The default value is `ft.Colors.OUTLINE`.
 
 ### `division_inactive_color`
 
 The [color](https://flet.dev/docs/guides/python/colors/) to use for the division shapes displayed on the slider track that is inactive.
 
-The default value is `ft.colors.PRIMARY_CONTAINER`.
+The default value is `ft.Colors.PRIMARY_CONTAINER`.
 
 ### `thumb_radius`
 
@@ -102,7 +102,7 @@ The default value is `10`.
 
 The color of the thumb.
 
-The default value is `ft.colors.PRIMARY`.
+The default value is `ft.Colors.PRIMARY`.
 
 ### `value`
 

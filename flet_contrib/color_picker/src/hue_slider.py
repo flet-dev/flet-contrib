@@ -1,6 +1,6 @@
 import colorsys
 
-import flet_core as ft
+import flet as ft
 
 from .utils import *
 

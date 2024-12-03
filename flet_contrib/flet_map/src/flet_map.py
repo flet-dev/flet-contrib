@@ -1,14 +1,14 @@
 from typing import Any, Optional, Union
 import math
-from flet_core import alignment
-import flet_core as ft
-from flet_core.container import Container
-from flet_core.control import OptionalNumber
-from flet_core.image import Image
-from flet_core.ref import Ref
-from flet_core.row import Row
-from flet_core.column import Column
-from flet_core.types import (
+from flet import alignment
+import flet as ft
+from flet.container import Container
+from flet.control import OptionalNumber
+from flet.image import Image
+from flet.ref import Ref
+from flet.row import Row
+from flet.column import Column
+from flet.types import (
     AnimationValue,
     OffsetValue,
     ResponsiveNumber,

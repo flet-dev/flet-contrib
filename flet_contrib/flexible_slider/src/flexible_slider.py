@@ -1,5 +1,5 @@
-import flet_core as ft
-import flet_core.canvas as cv
+import flet as ft
+import flet.canvas as cv
 
 
 class FlexibleSlider(ft.GestureDetector):
@@ -13,12 +13,12 @@ class FlexibleSlider(ft.GestureDetector):
         min=0.0,
         max=1.0,
         thumb_radius=10,
-        thumb_color=ft.colors.PRIMARY,
+        thumb_color=ft.Colors.PRIMARY,
         divisions=None,
-        inactive_color=ft.colors.OUTLINE_VARIANT,
-        active_color=ft.colors.PRIMARY,
-        division_inactive_color=ft.colors.PRIMARY_CONTAINER,
-        division_active_color=ft.colors.OUTLINE,
+        inactive_color=ft.Colors.OUTLINE_VARIANT,
+        active_color=ft.Colors.PRIMARY,
+        division_inactive_color=ft.Colors.PRIMARY_CONTAINER,
+        division_active_color=ft.Colors.OUTLINE,
     ):
         super().__init__()
         self.value = value

@@ -17,9 +17,9 @@ from flet_contrib.vertical_splitter import VerticalSplitter, FixedPane
 
 
 def main(page: ft.Page):
-    c_left = ft.Container(bgcolor=ft.colors.BLUE_400)
+    c_left = ft.Container(bgcolor=ft.Colors.BLUE_400)
 
-    c_right = ft.Container(bgcolor=ft.colors.YELLOW_400)
+    c_right = ft.Container(bgcolor=ft.Colors.YELLOW_400)
 
     vertical_splitter = VerticalSplitter(
         # height=400,

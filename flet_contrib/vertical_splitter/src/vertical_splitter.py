@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Optional
 
-import flet_core as ft
+import flet as ft
 
 
 class FixedPane(Enum):
