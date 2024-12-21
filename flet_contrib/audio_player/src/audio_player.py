@@ -16,8 +16,8 @@ class AudioPlayer(ft.Container):
         src: str | None = None,
         curr_idx: int = 0,
         font_family: str | None = None,
-        controls_vertical_alignment: ft.MainAxisAlignment = ft.MainAxisAlignment.NONE,
-        controls_horizontal_alignment: ft.CrossAxisAlignment = ft.CrossAxisAlignment.NONE,
+        controls_vertical_alignment: ft.MainAxisAlignment = ft.MainAxisAlignment.START,
+        controls_horizontal_alignment: ft.CrossAxisAlignment = ft.CrossAxisAlignment.START,
         *args,
         **kwargs,
     ):
