@@ -50,10 +50,10 @@ class HueSlider(ft.GestureDetector):
         self.on_change_hue()
 
     def drag_start(self, e: ft.DragStartEvent):
-        self.update_selected_hue(x=e.local_x)
+        self.update_selected_hue(x=e.local_position.x)
 
     def drag_update(self, e: ft.DragUpdateEvent):
-        self.update_selected_hue(x=e.local_x)
+        self.update_selected_hue(x=e.local_position.x)
 
     def generate_gradient_colors(self):
         colors = []
@@ -65,8 +65,8 @@ class HueSlider(ft.GestureDetector):
     def generate_slider(self):
         self.track = ft.Container(
             gradient=ft.LinearGradient(
-                begin=ft.alignment.center_left,
-                end=ft.alignment.center_right,
+                begin=ft.alignment.Alignment.CENTER_LEFT,
+                end=ft.alignment.Alignment.CENTER_RIGHT,
                 colors=self.generate_gradient_colors(),
             ),
             width=SLIDER_WIDTH - CIRCLE_SIZE,

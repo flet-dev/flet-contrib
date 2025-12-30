@@ -162,7 +162,7 @@ class ColorPicker(ft.Column):
             self.update_selected_color_view_values()
 
         def on_pan_update(e: ft.DragStartEvent):
-            __move_circle(x=e.local_x, y=e.local_y)
+            __move_circle(x=e.local_position.x, y=e.local_position.y)
             self.selected_color_view.update()
             self.thumb.update()
 
@@ -177,8 +177,8 @@ class ColorPicker(ft.Column):
 
         saturation_container = ft.Container(
             gradient=ft.LinearGradient(
-                begin=ft.alignment.center_left,
-                end=ft.alignment.center_right,
+                begin=ft.alignment.Alignment.CENTER_LEFT,
+                end=ft.alignment.Alignment.CENTER_RIGHT,
                 colors=[ft.Colors.WHITE, ft.Colors.RED],
             ),
             width=self.color_map_container.content.width - CIRCLE_SIZE,
@@ -192,8 +192,8 @@ class ColorPicker(ft.Column):
             content=saturation_container,
             blend_mode=ft.BlendMode.MULTIPLY,
             shader=ft.LinearGradient(
-                begin=ft.alignment.top_center,
-                end=ft.alignment.bottom_center,
+                begin=ft.alignment.Alignment.TOP_CENTER,
+                end=ft.alignment.Alignment.BOTTOM_CENTER,
                 colors=[ft.Colors.WHITE, ft.Colors.BLACK],
             ),
             border_radius=5,
